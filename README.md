@@ -1,1 +1,3 @@
 # startup
+
+[notes](./notes.md)
