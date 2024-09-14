@@ -10,7 +10,8 @@ effortlessly with **QuikVote**—the quick, easy solution to group indecision!
 ## Key features
 
 * Create/join a QuikVote room
-* Easily add voting options
+* Easily add voting choices
+* Vote!
 * View results
 * Create an account to save/view past QuikVotes
 
