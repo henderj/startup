@@ -1,4 +1,4 @@
-# QuikVote
+# [QuikVote](https://quikvote.click/)
 
 Struggling to decide what to do with friends? Whether it’s picking a
 restaurant, movie, or activity, **QuikVote** makes group decisions fast and fair.
@@ -42,6 +42,4 @@ Once all users submit their votes, all users are shown the option to view the re
 
 ![mockup](mockup.jpeg)
 
-## Notes
-
-[Notes](./notes.md)
+## [Notes](./notes.md)
