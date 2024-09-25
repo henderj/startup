@@ -42,4 +42,15 @@ Once all users submit their votes, all users are shown the option to view the re
 
 ![mockup](mockup.jpeg)
 
+## HTML Deliverable
+
+For this deliverable I built out the structure of my application using HTML.
+
+* [ ] HTML pages - 
+* [ ] Links - 
+* [ ] Text - 
+* [ ] Images - 
+* [ ] DB/Login - 
+* [ ] WebSocket - 
+
 ## [Notes](./notes.md)
