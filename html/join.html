@@ -15,11 +15,14 @@
       <hr />
     </header>
     <main>
-      <div>
+      <form method="get" action="vote.html">
         <label for="code">Enter your QuikVote code:</label>
-        <input name="code" type="text" />
-      </div>
-      <div><a href="vote.html">Join QuikVote</a></div>
+        <input id="code" name="code" type="text" value="YBD-027" required />
+        <p>Make sure this icon matches the QuikVote that you want to join:</p>
+        <img src="../public/icon.svg" alt="icon" />
+        <br />
+        <button type="submit">Join QuikVote</button>
+      </form>
     </main>
     <footer>
       <hr />
