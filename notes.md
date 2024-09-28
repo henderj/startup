@@ -8,6 +8,12 @@
 - domain name: quikvote.click
 - hosted zone: quikvote.click
 
+## push to server
+
+```bash
+./deployFiles.sh -k [key pair file] -h quikvote.click -s startup
+```
+
 
 ## ssh into server
 
