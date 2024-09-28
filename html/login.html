@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="eng">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -9,24 +9,24 @@
   <body>
     <header>
       <h1>Login</h1>
-      <menu>
+      <nav>
         <li><a href="index.html">Back</a></li>
-      </menu>
+      </nav>
       <hr />
     </header>
     <main>
       <div>
-        <form method="get" action="index.html">
+        <form method="post" action="/login">
           <div>
             <label for="email">Email</label>
-            <input name="email" type="text" placeholder="your@email.com" />
+            <input id="email" name="email" type="email" placeholder="your@email.com" required />
           </div>
           <div>
             <label for="password">Password</label>
-            <input name="password" type="password" placeholder="password" />
+            <input id="password" name="password" type="password" placeholder="password" required />
           </div>
-          <button type="submit">Login</button>
-          <button type="submit">Register</button>
+          <button type="submit" name="action" value="login">Login</button>
+          <button type="submit" name="action" value="register">Register</button>
         </form>
       </div>
     </main>
