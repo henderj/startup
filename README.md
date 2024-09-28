@@ -46,11 +46,12 @@ Once all users submit their votes, all users are shown the option to view the re
 
 For this deliverable I built out the structure of my application using HTML.
 
-* [ ] HTML pages - 
-* [ ] Links - 
-* [ ] Text - 
-* [ ] Images - 
-* [ ] DB/Login - 
-* [ ] WebSocket - 
+* [x] HTML pages - Seven HTML pages that represent the [home page](./html/index.html) and the ability to [create](./html/new.html)/[join](./html/join.html) a new vote, [vote](./html/vote.html), see the [results](./html/results.html), [login/register](./html/login.html), and view [past votes](./html/history.html).
+* [x] Links - Each page links to it's relevent pages.
+* [x] Text - There is text throughout the app telling the user how to use it.
+* [x] 3rd party call - The [create](./html/new.html)/[join](./html/join.html) a vote pages will call the [dicebear](https://www.dicebear.com/) api to generate a unique image for that vote room.
+* [x] Images - There is a "unique" icon shown when you [create](./html/new.html) a vote, and users can expect a matching one when they try to [join](./html/join.html) the same vote.
+* [x] DB/Login - [Login page and form](./html/login.html). [Past votes](./html/history.html) are stored in DB. [Vote rooms](./html/vote.html) are stored in DB during their life time.
+* [x] WebSocket - [Vote rooms](./html/vote.html) will allow people to add new options and see/vote for all the options that other people have added in real time.
 
 ## [Notes](./notes.md)
