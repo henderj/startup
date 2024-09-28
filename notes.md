@@ -26,3 +26,7 @@ for security purposes.
 ### Let's Encrypt
 
 Before Let's Encrypt, it used to cost a ton of money to get a certification. Now it's really cheap/free.
+
+### HTML
+
+The `<menu>` tag is deprecated in favor of the `<nav>` tag.
