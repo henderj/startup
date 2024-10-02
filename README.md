@@ -54,4 +54,15 @@ For this deliverable I built out the structure of my application using HTML.
 * [x] DB/Login - [Login page and form](./html/login.html). [Past votes](./html/history.html) are stored in DB. [Vote rooms](./html/vote.html) are stored in DB during their life time.
 * [x] WebSocket - [Vote rooms](./html/vote.html) will allow people to add new options and see/vote for all the options that other people have added in real time.
 
+## CSS Deliverable
+
+For this deliverable I built out the styling of my application using CSS.
+
+* [ ] Header, footer, and main content body
+* [ ] Navigation elements
+* [ ] Responsive to window resizing
+* [ ] Application elements
+* [ ] Application text content
+* [ ] Application images
+
 ## [Notes](./notes.md)
