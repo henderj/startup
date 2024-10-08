@@ -4,25 +4,33 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="../main.css" rel="stylesheet" />
+  <link href="login.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
   <title>Login</title>
 </head>
 
 <body>
   <header>
-    <h1>Login</h1>
     <nav>
-      <li><a href="../index.html">Back</a></li>
+      <ul>
+        <li>
+          <a href="../index.html">
+            <span class="material-symbols-outlined">arrow_back</span>
+          </a>
+        </li>
+      </ul>
     </nav>
-    <hr />
+    <h1>Login</h1>
   </header>
   <main>
-    <div>
+    <div class="form-container">
       <form method="post" action="/login">
-        <div>
+        <div class="form-group">
           <label for="email">Email</label>
           <input id="email" name="email" type="email" placeholder="your@email.com" required />
         </div>
-        <div>
+        <div class="form-group">
           <label for="password">Password</label>
           <input id="password" name="password" type="password" placeholder="password" required />
         </div>
@@ -32,9 +40,7 @@
     </div>
   </main>
   <footer>
-    <hr />
     <span class="text-reset">Josh Hendershot</span>
-    <br />
     <a href="https://github.com/henderj/startup">Github</a>
   </footer>
 </body>

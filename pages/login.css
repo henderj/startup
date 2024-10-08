@@ -1,0 +1,66 @@
+/* Additional CSS for the login page */
+
+/* Form Container */
+.form-container {
+  max-width: 400px;
+  margin: 20px auto;
+  background-color: #fff; /* White background for the form */
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #333;
+  text-align: left;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 1em;
+}
+
+.form-group input:focus {
+  border-color: #2563eb; /* Medium blue */
+  outline: none;
+}
+
+.form-container button {
+  width: 100%;
+  padding: 15px;
+  margin-top: 10px;
+  background-color: #2563eb; /* Medium blue */
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  font-size: 1.1em;
+  cursor: pointer;
+}
+
+.form-container button:hover {
+  background-color: #1e40af; /* Darker blue on hover */
+}
+
+/* Adjustments for smaller screens */
+@media (max-width: 400px) {
+  main form {
+    margin: 10px;
+    padding: 15px;
+  }
+
+  main form button {
+    padding: 12px;
+    font-size: 1em;
+  }
+}
+
