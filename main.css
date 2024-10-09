@@ -103,6 +103,10 @@ footer a:hover {
   text-decoration: underline;
 }
 
+.hidden {
+  display: none;
+}
+
 @media (min-width: 768px) {
   main {
     max-width: 800px;

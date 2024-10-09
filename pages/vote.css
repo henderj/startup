@@ -1,0 +1,105 @@
+/* General styling for the list */
+ul {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 20px;
+}
+
+ul li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.vote-buttons {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.vote-buttons button {
+  background: #fff;
+  color: #000;
+  border: none;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  display: flex;
+}
+
+.vote-buttons button:hover {
+  background-color: #1e40af;
+}
+
+.vote-value {
+  font-size: 1.2em;
+}
+
+/* Input form styling */
+form {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+form input {
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 5px 0 0 5px;
+  width: 60%;
+  font-size: 1em;
+}
+
+form button {
+  padding: 10px 20px;
+  border: none;
+  background-color: #2563eb;
+  color: white;
+  cursor: pointer;
+  border-radius: 0 5px 5px 0;
+  transition: background-color 0.3s ease;
+}
+
+form button:hover {
+  background-color: #1e40af;
+}
+
+/* Lock and Close buttons */
+main div button {
+  background-color: #2563eb;
+  color: #fff;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 1em;
+  width: 100%;
+  margin: 0 auto;
+  display: block;
+}
+
+main div button:hover {
+  background-color: #1e40af;
+}
+
+/* Footer styling */
+footer span {
+  font-weight: bold;
+}
+
+footer a {
+  color: #ffd700;
+}
+
+footer a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+

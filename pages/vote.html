@@ -4,33 +4,63 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="../main.css" rel="stylesheet" />
+  <link href="vote.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
   <title>QuikVote</title>
 </head>
 
 <body>
   <header>
     <h3>YBD-027</h3>
-    <button>Copy to clipboard</button>
-    <hr />
+    <span class="material-symbols-outlined">content_copy</span>
   </header>
   <main>
     <ul>
-      <li>Pizza <button>-</button> 2 <button>+</button></li>
-      <li>Burgers <button>-</button> 8 <button>+</button></li>
-      <li>Seafood <button>-</button> 5 <button>+</button></li>
+      <li>Pizza
+        <div class="vote-buttons">
+          <button>
+            <span class="material-symbols-outlined">arrow_upward</span>
+          </button>
+          <span class="vote-value">2</span>
+          <button>
+            <span class="material-symbols-outlined">arrow_downward</span>
+          </button>
+        </div>
+      </li>
+      <li>Burgers
+        <div class="vote-buttons">
+          <button>
+            <span class="material-symbols-outlined">arrow_upward</span>
+          </button>
+          <span class="vote-value">8</span>
+          <button>
+            <span class="material-symbols-outlined">arrow_downward</span>
+          </button>
+        </div>
+      </li>
+      <li>Seafood
+        <div class="vote-buttons">
+          <button>
+            <span class="material-symbols-outlined">arrow_upward</span>
+          </button>
+          <span class="vote-value">5</span>
+          <button>
+            <span class="material-symbols-outlined">arrow_downward</span>
+          </button>
+        </div>
+      </li>
     </ul>
     <form>
       <input type="text" placeholder="Add to list" />
       <button type="submit">Add</button>
     </form>
-    <div><button>Lock in vote</button></div>
-    <div><button>Close vote (if creator and vote is locked)</button></div>
-    <a href="results.html">View Results (if vote is closed)</a>
+    <div class="hidden"><button>Lock in vote</button></div>
+    <div class="hidden"><button>Close vote</button></div>
+    <a class="button" href="results.html">View Results</a>
   </main>
   <footer>
-    <hr />
     <span class="text-reset">Josh Hendershot</span>
-    <br />
     <a href="https://github.com/henderj/startup">Github</a>
   </footer>
 </body>
