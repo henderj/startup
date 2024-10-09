@@ -4,7 +4,8 @@ header h1 {
 }
 
 header::after {
-  content: ''
+  content: '';
+  width: 24px;
 }
 
 .form-container {
