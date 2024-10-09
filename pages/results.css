@@ -1,0 +1,39 @@
+ol {
+  list-style: none;
+  counter-reset: item;
+}
+
+ol li {
+  position: relative;
+  background-color: #fff;
+  margin-bottom: 10px;
+  margin-left: 45px;
+  padding: 15px 20px;
+  border-radius: 5px;
+  font-size: 1.2em;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  text-align: left;
+}
+
+ol li::before {
+  content: counter(item);
+  counter-increment: item;
+  position: absolute;
+  left: -45px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #2563eb;
+  color: #fff;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 1.2em;
+}
+
+ol li:hover {
+  background-color: #e0e7ff;
+}
+
