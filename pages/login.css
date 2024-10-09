@@ -1,10 +1,14 @@
-/* Additional CSS for the login page */
+header h1 {
+  font-family: 'Open Sans', sans-serif;
+  font-style: normal;
+}
 
-/* Form Container */
+header::after {
+  content: ''
+}
+
 .form-container {
-  max-width: 400px;
-  margin: 20px auto;
-  background-color: #fff; /* White background for the form */
+  background-color: #fff;
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -31,7 +35,7 @@
 }
 
 .form-group input:focus {
-  border-color: #2563eb; /* Medium blue */
+  border-color: #2563eb;
   outline: none;
 }
 
@@ -39,19 +43,18 @@
   width: 100%;
   padding: 15px;
   margin-top: 10px;
-  background-color: #2563eb; /* Medium blue */
-  color: #fff;
+  background-color: #2563eb;
   border: none;
   border-radius: 5px;
   font-size: 1.1em;
   cursor: pointer;
+  color: #fff;
 }
 
 .form-container button:hover {
-  background-color: #1e40af; /* Darker blue on hover */
+  background-color: #1e40af;
 }
 
-/* Adjustments for smaller screens */
 @media (max-width: 400px) {
   main form {
     margin: 10px;
@@ -63,4 +66,3 @@
     font-size: 1em;
   }
 }
-

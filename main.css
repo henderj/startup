@@ -38,10 +38,7 @@ header h1 {
 header nav ul {
   list-style: none;
   display: flex;
-}
-
-header nav ul li {
-  margin-left: 15px;
+  gap: 15px;
 }
 
 header nav ul li a {
@@ -114,9 +111,5 @@ footer a:hover {
     max-width: 800px;
     min-width: 550px;
     margin: 0 auto;
-  }
-
-  main div {
-    display: inline-block;
   }
 }
