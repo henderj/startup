@@ -1,0 +1,42 @@
+main h3 {
+  font-family: 'Open Sans', sans-serif;
+  font-size: 1.3em;
+  color: #2563eb;
+  margin-bottom: 20px;
+}
+
+ol {
+  list-style: none;
+  padding: 0;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+ol li {
+  background-color: #f0f0f0;
+  margin-bottom: 15px;
+  padding: 15px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+ol li h3 {
+  font-size: 1.5em;
+  color: #1e3a8a;
+  margin-bottom: 10px;
+}
+
+ol li p {
+  font-size: 1em;
+  color: #555;
+  margin: 5px 0;
+}
+
+ol li:hover {
+  background-color: #e0e7ff;
+}
+
+ol li div {
+  text-align: left;
+}
+
