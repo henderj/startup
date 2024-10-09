@@ -4,31 +4,36 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="../main.css" rel="stylesheet" />
+  <link href="join.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
   <title>Join QuikVote</title>
 </head>
 
 <body>
   <header>
-    <h1>Join a QuikVote</h1>
     <nav>
-      <li><a href="../index.html">Back</a></li>
+      <ul>
+        <li>
+          <a href="../index.html">
+            <span class="material-symbols-outlined">arrow_back</span>
+          </a>
+        </li>
+      </ul>
     </nav>
-    <hr />
+    <h1>Join</h1>
   </header>
   <main>
     <form method="get" action="vote.html">
       <label for="code">Enter your QuikVote code:</label>
       <input id="code" name="code" type="text" value="YBD-027" required />
-      <p>Make sure this icon matches the QuikVote that you want to join:</p>
       <img src="../public/icon.svg" alt="icon" />
-      <br />
-      <button type="submit">Join QuikVote</button>
+      <p>Make sure this icon matches the QuikVote that you want to join:</p>
+      <button class="button" type="submit">Join QuikVote</button>
     </form>
   </main>
   <footer>
-    <hr />
     <span class="text-reset">Josh Hendershot</span>
-    <br />
     <a href="https://github.com/henderj/startup">Github</a>
   </footer>
 </body>
