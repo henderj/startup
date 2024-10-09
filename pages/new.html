@@ -4,32 +4,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="../main.css" rel="stylesheet" />
+  <link href="new.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
   <title>New QuikVote</title>
 </head>
 
 <body>
   <header>
-    <h1>Create a new QuikVote</h1>
     <nav>
-      <li><a href="../index.html">Back</a></li>
+      <ul>
+        <li>
+          <a href="../index.html">
+            <span class="material-symbols-outlined">arrow_back</span>
+          </a>
+        </li>
+      </ul>
     </nav>
-    <hr />
+    <h1>Create</h1>
   </header>
   <main>
     <div>
-      <h2>Here's your unique QuikVote icon:</h2>
       <img src="../public/icon.svg" alt="icon" />
-      <h2>And here's your unique QuikVote code:</h2>
-      <div><b>YBD-027</b></div>
-      <button>Copy to clipboard</button>
-      <p>Share it with others!</p>
+      <div class="room-code">
+        <b>YBD-027</b>
+        <span class="material-symbols-outlined">content_copy</span>
+      </div>
+      <p>Share your unique QuikVote with others!</p>
     </div>
-    <div><a href="vote.html">Begin QuikVote</a></div>
+    <a class="button" href="vote.html">Begin QuikVote</a>
   </main>
   <footer>
-    <hr />
     <span class="text-reset">Josh Hendershot</span>
-    <br />
     <a href="https://github.com/henderj/startup">Github</a>
   </footer>
 </body>
