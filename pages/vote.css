@@ -1,4 +1,3 @@
-/* General styling for the list */
 ul {
   list-style: none;
   padding: 0;
@@ -9,7 +8,8 @@ ul li {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  padding: 15px;
+  font-size: 1.1em;
   margin-bottom: 10px;
   background-color: #fff;
   border-radius: 5px;
@@ -34,14 +34,13 @@ ul li {
 }
 
 .vote-buttons button:hover {
-  background-color: #1e40af;
+  background-color: #bdd2ff;
 }
 
 .vote-value {
   font-size: 1.2em;
 }
 
-/* Input form styling */
 form {
   display: flex;
   justify-content: center;
@@ -49,11 +48,11 @@ form {
 }
 
 form input {
-  padding: 10px;
+  padding: 15px;
   border: 2px solid #ddd;
   border-radius: 5px 0 0 5px;
-  width: 60%;
-  font-size: 1em;
+  font-size: 1.1em;
+  flex: 1;
 }
 
 form button {
@@ -69,37 +68,3 @@ form button {
 form button:hover {
   background-color: #1e40af;
 }
-
-/* Lock and Close buttons */
-main div button {
-  background-color: #2563eb;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  font-size: 1em;
-  width: 100%;
-  margin: 0 auto;
-  display: block;
-}
-
-main div button:hover {
-  background-color: #1e40af;
-}
-
-/* Footer styling */
-footer span {
-  font-weight: bold;
-}
-
-footer a {
-  color: #ffd700;
-}
-
-footer a:hover {
-  color: #fff;
-  text-decoration: underline;
-}
-
