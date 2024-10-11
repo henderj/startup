@@ -1,3 +1,13 @@
+header h1 {
+  font-family: 'Open Sans', sans-serif;
+  font-style: normal;
+}
+
+header::after {
+  content: '';
+  width: 24px;
+}
+
 form {
   display: flex;
   flex-direction: column;

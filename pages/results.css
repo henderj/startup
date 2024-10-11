@@ -1,3 +1,12 @@
+header h1 {
+  font-family: 'Open Sans', sans-serif;
+  font-style: normal;
+}
+
+header {
+  justify-content: center;
+}
+
 ol {
   list-style: none;
   counter-reset: item;
@@ -32,8 +41,3 @@ ol li::before {
   border-radius: 50%;
   font-size: 1.2em;
 }
-
-ol li:hover {
-  background-color: #e0e7ff;
-}
-

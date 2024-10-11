@@ -1,3 +1,13 @@
+header h1 {
+  font-family: 'Open Sans', sans-serif;
+  font-style: normal;
+}
+
+header::after {
+  content: '';
+  width: 24px;
+}
+
 h2 {
   font-size: 1.5em;
   margin-bottom: 15px;
@@ -7,12 +17,21 @@ h2 {
   font-size: 2.5em;
   color: #333;
   letter-spacing: 3px;
-  background-color: #f1f5f9;
+  background-color: #fff;
   padding: 10px;
   border: 2px solid #333;
   border-radius: 8px;
   display: block;
   margin-top: 15px;
+  width: 100%;
+}
+
+.room-code:hover {
+  background: #e4e7eb;
+}
+
+.room-code:active {
+  background: #c9ccd1;
 }
 
 main p {

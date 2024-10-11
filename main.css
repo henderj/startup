@@ -67,6 +67,7 @@ main {
   border: none;
   line-height: unset;
   font-family: unset;
+  cursor: pointer;
 }
 
 .button:hover {

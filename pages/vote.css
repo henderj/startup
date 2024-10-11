@@ -1,3 +1,8 @@
+header {
+  justify-content: center;
+  gap: 10px;
+}
+
 ul {
   list-style: none;
   padding: 0;

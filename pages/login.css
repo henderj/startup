@@ -15,8 +15,10 @@ header::after {
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.form-group {
-  margin-bottom: 15px;
+.form-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
 }
 
 .form-group label {
@@ -38,32 +40,4 @@ header::after {
 .form-group input:focus {
   border-color: #2563eb;
   outline: none;
-}
-
-.form-container button {
-  width: 100%;
-  padding: 15px;
-  margin-top: 10px;
-  background-color: #2563eb;
-  border: none;
-  border-radius: 5px;
-  font-size: 1.1em;
-  cursor: pointer;
-  color: #fff;
-}
-
-.form-container button:hover {
-  background-color: #1e40af;
-}
-
-@media (max-width: 400px) {
-  main form {
-    margin: 10px;
-    padding: 15px;
-  }
-
-  main form button {
-    padding: 12px;
-    font-size: 1em;
-  }
 }
