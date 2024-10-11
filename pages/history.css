@@ -32,11 +32,6 @@ ol li p {
   margin: 5px 0;
 }
 
-ol li:hover {
-  background-color: #e0e7ff;
-}
-
 ol li div {
   text-align: left;
 }
-

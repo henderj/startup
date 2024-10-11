@@ -64,6 +64,9 @@ main {
   text-decoration: none;
   border-radius: 5px;
   font-size: 1.1em;
+  border: none;
+  line-height: unset;
+  font-family: unset;
 }
 
 .button:hover {
