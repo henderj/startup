@@ -1,4 +1,4 @@
-# [QuikVote](https://quikvote.click/)
+# [QuikVote](https://startup.quikvote.click/)
 
 Struggling to decide what to do with friends? Whether it’s picking a
 restaurant, movie, or activity, **QuikVote** makes group decisions fast and fair.
