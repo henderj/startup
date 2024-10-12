@@ -58,11 +58,11 @@ For this deliverable I built out the structure of my application using HTML.
 
 For this deliverable I built out the styling of my application using CSS.
 
-* [ ] Header, footer, and main content body
-* [ ] Navigation elements
-* [ ] Responsive to window resizing
-* [ ] Application elements
-* [ ] Application text content
-* [ ] Application images
+* [x] Header, footer, and main content body - Header and Footer stay put, main content takes up rest of space and scrolls when needed.
+* [x] Navigation elements - Icons in header and buttons in main content for navigation.
+* [x] Responsive to window resizing - Simple but effective responsive design.
+* [x] Application elements - Buttons, input fields, ordered/unordered lists. 
+* [x] Application text content - Raleway font for QuikVote header, Open Sans for everything else.
+* [x] Application images - Centered and sized unique "room" images
 
 ## [Notes](./notes.md)
