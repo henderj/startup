@@ -22,7 +22,7 @@ export default function App() {
         </nav>
       </header>
       <main>
-        App component goes here
+        <p>App component goes here</p>
       </main>
       <footer>
         <span class="text-reset">Josh Hendershot</span>

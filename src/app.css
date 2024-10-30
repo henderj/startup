@@ -9,7 +9,7 @@
   padding: 0;
 }
 
-body {
+#root {
   font-family: 'Open Sans', sans-serif;
   background-color: #f4f4f4;
   color: #333;
