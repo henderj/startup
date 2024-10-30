@@ -65,4 +65,13 @@ For this deliverable I built out the styling of my application using CSS.
 * [x] Application text content - Raleway font for QuikVote header, Open Sans for everything else.
 * [x] Application images - Centered and sized unique "room" images
 
+## React Deliverable
+
+For this deliverable I converted my app to a React single-page application.
+
+* [ ] Bundled using Vite
+* [ ] Multiple react components that implement or mock all app functionality
+* [ ] React router
+* [ ] React hooks
+
 ## [Notes](./notes.md)
