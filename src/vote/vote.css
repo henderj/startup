@@ -1,15 +1,15 @@
-header {
+.header--room-code {
   justify-content: center;
   gap: 10px;
 }
 
-ul {
+.vote-options {
   list-style: none;
   padding: 0;
   margin-bottom: 20px;
 }
 
-ul li {
+.vote-options__item {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -27,7 +27,7 @@ ul li {
   align-items: center;
 }
 
-.vote-buttons button {
+.vote-buttons__button {
   background: #fff;
   color: #000;
   border: none;
@@ -38,21 +38,21 @@ ul li {
   display: flex;
 }
 
-.vote-buttons button:hover {
+.vote-buttons__button:hover {
   background-color: #bdd2ff;
 }
 
-.vote-value {
+.vote-buttons__value {
   font-size: 1.2em;
 }
 
-form {
+.add-option {
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
 }
 
-form input {
+.add-option__input {
   padding: 15px;
   border: 2px solid #ddd;
   border-radius: 5px 0 0 5px;
@@ -60,7 +60,7 @@ form input {
   flex: 1;
 }
 
-form button {
+.add-option__button {
   padding: 10px 20px;
   border: none;
   background-color: #2563eb;
@@ -70,6 +70,6 @@ form button {
   transition: background-color 0.3s ease;
 }
 
-form button:hover {
+.add-option__button:hover {
   background-color: #1e40af;
 }
