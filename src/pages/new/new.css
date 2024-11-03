@@ -3,7 +3,7 @@
   font-style: normal;
 }
 
-.header--center::after {
+.header--center-with-back::after {
   content: '';
   width: 24px;
 }

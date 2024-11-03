@@ -1,13 +1,13 @@
 import React from 'react';
 import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom'
 import './app.css';
-import Home from './home/home';
-import New from './new/new';
-import Join from './join/join';
-import Vote from './vote/vote';
-import Results from './results/results';
-import History from './history/history';
-import Login from './login/login'
+import Home from './pages/home/home';
+import New from './pages/new/new';
+import Join from './pages/join/join';
+import Vote from './pages/vote/vote';
+import Results from './pages/results/results';
+import History from './pages/history/history';
+import Login from './pages/login/login'
 
 export default function App() {
   return (
