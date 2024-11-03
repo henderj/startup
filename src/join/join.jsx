@@ -1,5 +1,6 @@
 import React from 'react';
 import './join.css';
+import { NavLink } from 'react-router-dom';
 
 /*
   <title>Join QuikVote</title>
@@ -14,12 +15,12 @@ import './join.css';
 
 export default function Join() {
   return (
-    <form method="get" action="vote.html">
-      <label for="code">Enter your QuikVote code:</label>
-      <input id="code" name="code" type="text" value="YBD-027" required />
-      <img src="../public/icon.svg" alt="icon" />
+    <form className="join-form" method="get" action="vote.html">
+      <label className="join-form__label" for="code">Enter your QuikVote code:</label>
+      <input className="join-form__input" id="code" name="code" type="text" value="YBD-027" required />
+      <img className="join-form__img" src="../public/icon.svg" alt="icon" />
       <p>Make sure this icon matches the QuikVote that you want to join:</p>
-      <button class="button" type="submit">Join QuikVote</button>
+      <NavLink className="main__button" to="/vote">Join QuikVote</NavLink>
     </form>
   )
 }
