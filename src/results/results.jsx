@@ -1,5 +1,6 @@
 import React from 'react';
 import './results.css';
+import { NavLink } from 'react-router-dom';
 
 /*
   <title>Results</title>
@@ -12,12 +13,12 @@ import './results.css';
 export default function Results() {
   return (
     <>
-      <ol>
-        <li>Pizza</li>
-        <li>Burgers</li>
-        <li>Seafood</li>
+      <ol className="results-list">
+        <li className="results-list__item">Pizza</li>
+        <li className="results-list__item">Burgers</li>
+        <li className="results-list__item">Seafood</li>
       </ol>
-      <a class="button" href="../index.html">Home</a>
+      <NavLink className="main__button" to="/">Home</NavLink>
     </>
   )
 }

@@ -1,18 +1,13 @@
-header h1 {
-  font-family: 'Open Sans', sans-serif;
-  font-style: normal;
-}
-
-header {
+.header--center {
   justify-content: center;
 }
 
-ol {
+.results-list {
   list-style: none;
   counter-reset: item;
 }
 
-ol li {
+.results-list__item {
   position: relative;
   background-color: #fff;
   margin-bottom: 10px;
@@ -24,7 +19,7 @@ ol li {
   text-align: left;
 }
 
-ol li::before {
+.results-list__item::before {
   content: counter(item);
   counter-increment: item;
   position: absolute;
