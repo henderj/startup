@@ -1,35 +1,25 @@
-header h1 {
-  font-family: 'Open Sans', sans-serif;
-  font-style: normal;
-}
-
-header::after {
-  content: '';
-  width: 24px;
-}
-
-.form-container {
+.login {
   background-color: #fff;
   padding: 20px;
   border-radius: 5px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.form-container form {
+.login__form {
   display: flex;
   flex-direction: column;
   gap: 15px;
 }
 
-.form-group label {
+.login-field__label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: -10px;
   font-weight: bold;
   color: #333;
   text-align: left;
 }
 
-.form-group input {
+.login-field__input {
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
@@ -37,7 +27,7 @@ header::after {
   font-size: 1em;
 }
 
-.form-group input:focus {
+.login-field__input:focus {
   border-color: #2563eb;
   outline: none;
 }

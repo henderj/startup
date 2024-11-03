@@ -6,7 +6,7 @@ import './login.css';
   ...
         <li>
           <a href="../index.html">
-            <span class="material-symbols-outlined">arrow_back</span>
+            <span className="material-symbols-outlined">arrow_back</span>
           </a>
         </li>
     <h1>Login</h1>
@@ -14,22 +14,16 @@ import './login.css';
 
 export default function Login() {
   return (
-    <div class="form-container">
-      <form method="post" action="/login">
-        <div class="form-group">
-          <label for="username">Username</label>
-          <input id="username" name="username" type="text" required />
-        </div>
-        <div class="form-group">
-          <label for="email">Email</label>
-          <input id="email" name="email" type="email" required />
-        </div>
-        <div class="form-group">
-          <label for="password">Password</label>
-          <input id="password" name="password" type="password" required />
-        </div>
-        <button class="button" type="submit" name="action" value="login">Login</button>
-        <button class="button" type="submit" name="action" value="register">Register</button>
+    <div className="login">
+      <form className="login__form" method="post" action="/login">
+        <label className="login-field__label" for="username">Username</label>
+        <input className="login-field__input" id="username" name="username" type="text" required />
+        <label className="login-field__label" for="email">Email</label>
+        <input className="login-field__input" id="email" name="email" type="email" required />
+        <label className="login-field__label" for="password">Password</label>
+        <input className="login-field__input" id="password" name="password" type="password" required />
+        <button className="main__button" type="submit" name="action" value="login">Login</button>
+        <button className="main__button" type="submit" name="action" value="register">Register</button>
       </form>
     </div>
   )
