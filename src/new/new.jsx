@@ -1,5 +1,6 @@
 import React from 'react';
 import './new.css';
+import { NavLink } from 'react-router-dom';
 
 /*
    <title>New QuikVote</title>
@@ -16,13 +17,13 @@ export default function New() {
     <>
       <div>
         <img src="../public/icon.svg" alt="icon" />
-        <button class="button room-code">
+        <button className="room-code">
           <b>YBD-027</b>
-          <span class="material-symbols-outlined">content_copy</span>
+          <span className="material-symbols-outlined">content_copy</span>
         </button>
-        <p>Share your unique QuikVote with others!</p>
+        <p className="room-code__note">Share your unique QuikVote with others!</p>
       </div>
-      <a class="button" href="vote.html">Begin QuikVote</a>
+      <NavLink className="main__button" to="/vote">Begin QuikVote</NavLink>
     </>
   )
 }
