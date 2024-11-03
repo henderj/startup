@@ -1,33 +1,56 @@
 import React from 'react';
+import { BrowserRouter, NavLink, Route, Routes } from 'react-router-dom'
 import './app.css';
+import Home from './home/home';
+import New from './new/new';
+import Join from './join/join';
+import Vote from './vote/vote';
+import Results from './results/results';
+import History from './history/history';
+import Login from './login/login'
 
 export default function App() {
   return (
     <>
-      <header>
-        <h1>QuikVote</h1>
-        <nav>
-          <ul>
-            <li>
-              <a href="./pages/history.html">
-                <span class="material-symbols-outlined">history</span>
-              </a>
-            </li>
-            <li>
-              <a href="./pages/login.html">
-                <span class="material-symbols-outlined">account_circle</span>
-              </a>
-            </li>
-          </ul>
-        </nav>
-      </header>
-      <main>
-        <p>App component goes here</p>
-      </main>
-      <footer>
-        <span class="text-reset">Josh Hendershot</span>
-        <a href="https://github.com/henderj/startup">Github</a>
-      </footer>
+      <BrowserRouter>
+        <header className="header">
+          <h1 className="header__title">QuikVote</h1>
+          <nav>
+            <ul className="header__nav-list">
+              <li>
+                <NavLink className="header__nav-link" to='history'>
+                  <span className="material-symbols-outlined">history</span>
+                </NavLink>
+              </li>
+              <li>
+                <NavLink className="header__nav-link" to='login'>
+                  <span className="material-symbols-outlined">account_circle</span>
+                </NavLink>
+              </li>
+            </ul>
+          </nav>
+        </header>
+        <main className="main">
+          <Routes>
+            <Route path='/' element={<Home />} exact />
+            <Route path='/new' element={<New />} />
+            <Route path='/join' element={<Join />} />
+            <Route path='/vote' element={<Vote />} />
+            <Route path='/results' element={<Results />} />
+            <Route path='/history' element={<History />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/*' element={<NotFound />} />
+          </Routes>
+        </main>
+        <footer className="footer">
+          <span className="text-reset">Josh Hendershot</span>
+          <a className="footer__link" href="https://github.com/henderj/startup">Github</a>
+        </footer>
+      </BrowserRouter>
     </>
   )
+}
+
+function NotFound() {
+  return <p>404: Return to sender. Address unknown.</p>;
 }

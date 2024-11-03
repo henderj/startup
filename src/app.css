@@ -19,7 +19,7 @@
   height: 100vh;
 }
 
-header {
+.header {
   background-color: #1e3a8a;
   color: #fff;
   padding: 15px 20px;
@@ -28,26 +28,26 @@ header {
   align-items: center;
 }
 
-header h1 {
+.header__title {
   font-size: 1.5em;
   font-family: 'Raleway', sans-serif;
   font-weight: 800;
   font-style: italic;
 }
 
-header nav ul {
+.header__nav-list {
   list-style: none;
   display: flex;
   gap: 15px;
 }
 
-header nav ul li a {
+.header__nav-link {
   color: #fff;
   text-decoration: none;
   font-size: 1.5em;
 }
 
-main {
+.main {
   padding: 20px;
   text-align: center;
   flex: 1;
@@ -57,7 +57,7 @@ main {
   overflow-y: auto;
 }
 
-.button {
+.main__button {
   display: block;
   background-color: #2563eb;
   color: #fff;
@@ -75,22 +75,22 @@ main {
   background-color: #1e40af;
 }
 
-main p {
+.home__p {
   margin-top: 20px;
   font-size: 1em;
 }
 
-main p a {
+.home__link {
   color: #1e3a8a;
   text-decoration: none;
   font-weight: bold;
 }
 
-main p a:hover {
+.home__link:hover {
   text-decoration: underline;
 }
 
-footer {
+.footer {
   background-color: #1e3a8a;
   color: #fff;
   padding: 15px 20px;
@@ -100,11 +100,11 @@ footer {
   justify-content: space-between;
 }
 
-footer a {
+.footer__link {
   color: #fff;
 }
 
-footer a:hover {
+.footer__link:hover {
   text-decoration: underline;
 }
 
@@ -113,7 +113,7 @@ footer a:hover {
 }
 
 @media (min-width: 768px) {
-  main {
+  .main {
     max-width: 800px;
     min-width: 550px;
     margin: 0 auto;
