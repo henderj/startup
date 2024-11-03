@@ -81,6 +81,11 @@
   cursor: pointer;
 }
 
+.main__button--disabled {
+  background-color: grey;
+  cursor: default;
+}
+
 .button:hover {
   background-color: #1e40af;
 }

@@ -70,6 +70,15 @@
   transition: background-color 0.3s ease;
 }
 
+.add-option__button--disabled {
+  background-color: grey;
+  cursor: default;
+}
+
 .add-option__button:hover {
   background-color: #1e40af;
+}
+
+.add-option__button--disabled:hover {
+  background-color: grey;
 }

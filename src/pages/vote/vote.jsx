@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './vote.css';
 import { NavLink } from 'react-router-dom';
 
@@ -6,7 +6,105 @@ import { NavLink } from 'react-router-dom';
   <title>QuikVote</title>
   */
 
-export default function Vote() {
+const MIN_VALUE = 0
+const MAX_VALUE = 10
+
+function VoteOption(props) {
+  const [value, setValue] = useState(5)
+  function increaseValue() {
+    if (value == MAX_VALUE) {
+      return
+    }
+    setValue(value + 1)
+  }
+  function decreaseValue() {
+    if (value == MIN_VALUE) {
+      return
+    }
+    setValue(value - 1)
+  }
+  return (
+    <li className="vote-options__item">{props.name}
+      <div className="vote-buttons">
+        <button className="vote-buttons__button" onClick={decreaseValue}>
+          <span className="material-symbols-outlined">arrow_downward</span>
+        </button>
+        <span className="vote-buttons__value">{value}</span>
+        <button className="vote-buttons__button" onClick={increaseValue}>
+          <span className="material-symbols-outlined">arrow_upward</span>
+        </button>
+      </div>
+    </li>
+  )
+}
+
+function AddOption(props) {
+  const [value, setValue] = useState('')
+  function submit() {
+    props.onSubmit(value)
+    setValue('')
+  }
+  function onKeyDown(event) {
+    if (event.key == "Enter" && !checkDisabled()) {
+      submit()
+    }
+  }
+  function addButtonClicked(event) {
+    event.preventDefault()
+    submit()
+  }
+  function checkDisabled() {
+    return value == ''
+  }
+  return (
+    <form className="add-option">
+      <input
+        className="add-option__input"
+        type="text"
+        onKeyDown={onKeyDown}
+        value={value}
+        onChange={(event) => setValue(event.target.value)}
+        placeholder="Add to list" />
+      <button
+        className={`add-option__button ${checkDisabled() ? 'add-option__button--disabled' : ''}`}
+        type="submit"
+        onClick={addButtonClicked}
+        disabled={checkDisabled()}>
+        <span className="material-symbols-outlined">add</span>
+      </button>
+    </form>
+  )
+}
+
+export default function Vote(props) {
+  const [options, setOptions] = useState([])
+  const [lockedIn, setLockedIn] = useState(false)
+  function addOption(opt) {
+    setOptions([...options, opt])
+  }
+  function renderOptions() {
+    if (options.length == 0) {
+      return (<p>Add an option...</p>)
+    }
+    return options.map((opt, i) => (
+      <VoteOption name={opt} key={i} />
+    ))
+  }
+  function renderButton() {
+    const lockInButton = (<button className="main__button" onClick={() => setLockedIn(true)}>Lock in vote</button>)
+    const lockedInButton = (<button className="main__button main__button--disabled" disabled>Locked in</button>)
+    const closeVoteButton = (<button className="main__button">Close vote</button>)
+    const viewResultsButton = (<NavLink className="main__button" to="/results">View Results</NavLink>)
+
+    if (!lockedIn) {
+      return lockInButton
+    }
+    if (/*!props.resultsReady*/ false) {
+      // if (context.isRoomOwner) { return closeVoteButton }
+      return lockedInButton
+    }
+    return viewResultsButton
+  }
   return (
     <>
       <header className="header header--room-code">
@@ -15,49 +113,10 @@ export default function Vote() {
       </header>
       <main className="main">
         <ul className="vote-options">
-          <li className="vote-options__item">Pizza
-            <div className="vote-buttons">
-              <button className="vote-buttons__button">
-                <span className="material-symbols-outlined">arrow_upward</span>
-              </button>
-              <span className="vote-buttons__value">2</span>
-              <button className="vote-buttons__button">
-                <span className="material-symbols-outlined">arrow_downward</span>
-              </button>
-            </div>
-          </li>
-          <li className="vote-options__item">Burgers
-            <div className="vote-buttons">
-              <button className="vote-buttons__button">
-                <span className="material-symbols-outlined">arrow_upward</span>
-              </button>
-              <span className="vote-buttons__value">8</span>
-              <button className="vote-buttons__button">
-                <span className="material-symbols-outlined">arrow_downward</span>
-              </button>
-            </div>
-          </li>
-          <li className="vote-options__item">Seafood
-            <div className="vote-buttons">
-              <button className="vote-buttons__button">
-                <span className="material-symbols-outlined">arrow_upward</span>
-              </button>
-              <span className="vote-buttons__value">5</span>
-              <button className="vote-buttons__button">
-                <span className="material-symbols-outlined">arrow_downward</span>
-              </button>
-            </div>
-          </li>
+          {renderOptions()}
         </ul>
-        <form className="add-option">
-          <input className="add-option__input" type="text" placeholder="Add to list" />
-          <button className="add-option__button" type="submit">
-            <span className="material-symbols-outlined">add</span>
-          </button>
-        </form>
-        <button className="main__button">Lock in vote</button>
-        <button className="main__button">Close vote</button>
-        <NavLink className="main__button" to="/results">View Results</NavLink>
+        <AddOption onSubmit={addOption} />
+        {renderButton()}
       </main>
     </>
   )
