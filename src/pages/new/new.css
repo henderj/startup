@@ -1,13 +1,3 @@
-.header__title--center {
-  font-family: 'Open Sans', sans-serif;
-  font-style: normal;
-}
-
-.header--center-with-back::after {
-  content: '';
-  width: 24px;
-}
-
 .room-code {
   font-size: 2.5em;
   color: #333;

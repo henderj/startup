@@ -28,11 +28,21 @@
   align-items: center;
 }
 
+.header--center-with-back::after {
+  content: '';
+  width: 24px;
+}
+
 .header__title {
   font-size: 1.5em;
   font-family: 'Raleway', sans-serif;
   font-weight: 800;
   font-style: italic;
+}
+
+.header__title--center {
+  font-family: 'Open Sans', sans-serif;
+  font-style: normal;
 }
 
 .header__nav-list {
