@@ -7,37 +7,8 @@ import dayjs from 'dayjs'
   <title>Past QuikVotes</title>
   */
 
-/*
-* data = {
-    winner: string
-    runnersUp: string[]
-    date: datetime
-  }
-*/
-function HistoryItem(props) {
-  const { winner, runnersUp, date } = props.data
-  function getRunnersUp() {
-    const MAX_LENGTH = 3
-    if (runnersUp.length <= MAX_LENGTH) {
-      return runnersUp.join(', ')
-    }
-    const clippedList = runnersUp.slice(0, MAX_LENGTH - 1)
-    clippedList.push(`(${runnersUp.length - MAX_LENGTH + 1} more)`)
-    return clippedList.join(', ')
-  }
-  function getFormattedDate() {
-    return dayjs(date).format('dddd, MMM D, YYYY - h:mm A')
-  }
-  return (
-    <li className="history-item">
-      <h3 className="history-item__header">Winner: {winner}</h3>
-      <p className="history-item__content">Runner up(s): {getRunnersUp()}</p>
-      <p className="history-item__content">{getFormattedDate()}</p>
-    </li>
-  )
-}
-
 export default function History() {
+  const username = 'noobmaster42' // TODO: get from context
   const dataArray = [ // TODO: load from server
     {
       winner: 'Star Wars',
@@ -75,7 +46,7 @@ export default function History() {
         <h1 className="header__title header__title--center">History</h1>
       </header>
       <main className="main">
-        <h3 className="username">Username: <b>noobmaster42</b></h3>
+        <h3 className="username">Username: <b>{username}</b></h3>
         <ol className="history-list">
           {renderItems()}
         </ol>
@@ -83,3 +54,34 @@ export default function History() {
     </>
   )
 }
+
+/*
+* data = {
+    winner: string
+    runnersUp: string[]
+    date: datetime
+  }
+*/
+function HistoryItem(props) {
+  const { winner, runnersUp, date } = props.data
+  function getRunnersUp() {
+    const MAX_LENGTH = 3
+    if (runnersUp.length <= MAX_LENGTH) {
+      return runnersUp.join(', ')
+    }
+    const clippedList = runnersUp.slice(0, MAX_LENGTH - 1)
+    clippedList.push(`(${runnersUp.length - MAX_LENGTH + 1} more)`)
+    return clippedList.join(', ')
+  }
+  function getFormattedDate() {
+    return dayjs(date).format('dddd, MMM D, YYYY - h:mm A')
+  }
+  return (
+    <li className="history-item">
+      <h3 className="history-item__header">Winner: {winner}</h3>
+      <p className="history-item__content">Runner up(s): {getRunnersUp()}</p>
+      <p className="history-item__content">{getFormattedDate()}</p>
+    </li>
+  )
+}
+
