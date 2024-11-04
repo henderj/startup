@@ -7,6 +7,12 @@ import { NavLink } from 'react-router-dom';
   */
 
 export default function Results() {
+  const items = ["Pizza", "Burgers", "Seafood"] // TODO: read from server
+  function renderItems() {
+    return items.map((item, i) => (
+      <li className="results-list__item" key={i}>{item}</li>
+    ))
+  }
   return (
     <>
       <header className="header header--center">
@@ -14,9 +20,7 @@ export default function Results() {
       </header>
       <main className="main">
         <ol className="results-list">
-          <li className="results-list__item">Pizza</li>
-          <li className="results-list__item">Burgers</li>
-          <li className="results-list__item">Seafood</li>
+          {renderItems()}
         </ol>
         <NavLink className="main__button" to="/">Home</NavLink>
       </main>
