@@ -1,14 +1,15 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import './history.css';
 import { NavLink } from 'react-router-dom';
 import dayjs from 'dayjs'
+import { UserContext } from '../../context/userContext';
 
 /*
   <title>Past QuikVotes</title>
   */
 
 export default function History() {
-  const username = 'noobmaster42' // TODO: get from context
+  const { currentUser } = useContext(UserContext)
   const dataArray = [ // TODO: load from server
     {
       winner: 'Star Wars',
@@ -46,7 +47,7 @@ export default function History() {
         <h1 className="header__title header__title--center">History</h1>
       </header>
       <main className="main">
-        <h3 className="username">Username: <b>{username}</b></h3>
+        <h3 className="username">Username: <b>{currentUser}</b></h3>
         <ol className="history-list">
           {renderItems()}
         </ol>

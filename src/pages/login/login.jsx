@@ -1,12 +1,32 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import './login.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
+import { UserContext } from '../../context/userContext';
 
 /*
   <title>Login</title>
   */
 
 export default function Login() {
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+
+  const { setCurrentUser } = useContext(UserContext)
+  const navigate = useNavigate()
+
+  function register(event) {
+    event.preventDefault()
+    // TODO: call and verify with server
+    setCurrentUser(username)
+    navigate('/')
+  }
+  function login(event) {
+    event.preventDefault()
+    // TODO: call and verify with server
+    setCurrentUser(username)
+    navigate('/')
+  }
   return (
     <>
       <header className="header header--center-with-back">
@@ -23,18 +43,49 @@ export default function Login() {
       </header>
       <main className="main">
         <div className="login">
-          < form className="login__form" method="post" action="/login" >
-            <label className="login-field__label" for="username">Username</label>
-            <input className="login-field__input" id="username" name="username" type="text" required />
-            <label className="login-field__label" for="email">Email</label>
-            <input className="login-field__input" id="email" name="email" type="email" required />
-            <label className="login-field__label" for="password">Password</label>
-            <input className="login-field__input" id="password" name="password" type="password" required />
-            <button className="main__button" type="submit" name="action" value="login">Login</button>
-            <button className="main__button" type="submit" name="action" value="register">Register</button>
-          </form >
-        </div >
-      </main >
+          <form className="login__form" method="post" action="/login" >
+            <label className="login-field__label" htmlFor="username">Username</label>
+            <input
+              className="login-field__input"
+              id="username"
+              name="username"
+              type="text"
+              value={username}
+              onChange={(event) => setUsername(event.target.value)}
+              required />
+            <label className="login-field__label" htmlFor="email">Email</label>
+            <input
+              className="login-field__input"
+              id="email"
+              name="email"
+              type="email"
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
+              required />
+            <label className="login-field__label" htmlFor="password">Password</label>
+            <input
+              className="login-field__input"
+              id="password"
+              name="password"
+              type="password"
+              value={password}
+              onChange={(event) => setPassword(event.target.value)}
+              required />
+            <button
+              className="main__button"
+              type="submit"
+              name="action"
+              value="login"
+              onClick={login}>Login</button>
+            <button
+              className="main__button"
+              type="submit"
+              name="action"
+              value="register"
+              onClick={register}>Register</button>
+          </form>
+        </div>
+      </main>
     </>
   )
 }

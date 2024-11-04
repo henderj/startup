@@ -1,19 +1,23 @@
 
-import React from 'react';
+import React, { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
+import { UserContext } from '../../context/userContext';
 
 export default function Home() {
+  const { currentUser } = useContext(UserContext)
   return (
     <>
       <header className="header">
         <h1 className="header__title">QuikVote</h1>
         <nav>
           <ul className="header__nav-list">
-            <li>
-              <NavLink className="header__nav-link" to='history'>
-                <span className="material-symbols-outlined">history</span>
-              </NavLink>
-            </li>
+            {currentUser && (
+              <li>
+                <NavLink className="header__nav-link" to='history'>
+                  <span className="material-symbols-outlined">history</span>
+                </NavLink>
+              </li>
+            )}
             <li>
               <NavLink className="header__nav-link" to='login'>
                 <span className="material-symbols-outlined">account_circle</span>

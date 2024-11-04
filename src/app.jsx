@@ -8,21 +8,24 @@ import Vote from './pages/vote/vote';
 import Results from './pages/results/results';
 import History from './pages/history/history';
 import Login from './pages/login/login'
+import UserContextProvider from './context/userContext';
 
 export default function App() {
   return (
     <>
       <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<Home />} exact />
-          <Route path='/new' element={<New />} />
-          <Route path='/join' element={<Join />} />
-          <Route path='/vote' element={<Vote />} />
-          <Route path='/results' element={<Results />} />
-          <Route path='/history' element={<History />} />
-          <Route path='/login' element={<Login />} />
-          <Route path='/*' element={<NotFound />} />
-        </Routes>
+        <UserContextProvider>
+          <Routes>
+            <Route path='/' element={<Home />} exact />
+            <Route path='/new' element={<New />} />
+            <Route path='/join' element={<Join />} />
+            <Route path='/vote' element={<Vote />} />
+            <Route path='/results' element={<Results />} />
+            <Route path='/history' element={<History />} />
+            <Route path='/login' element={<Login />} />
+            <Route path='/*' element={<NotFound />} />
+          </Routes>
+        </UserContextProvider>
         <footer className="footer">
           <span className="text-reset">Josh Hendershot</span>
           <a className="footer__link" href="https://github.com/henderj/startup">Github</a>
