@@ -69,9 +69,9 @@ For this deliverable I built out the styling of my application using CSS.
 
 For this deliverable I converted my app to a React single-page application.
 
-* [ ] Bundled using Vite
-* [ ] Multiple react components that implement or mock all app functionality
-* [ ] React router
-* [ ] React hooks
+* [x] Bundled using Vite - I used Vite to test, build, and bundle my frontend code.
+* [x] Multiple react components that implement or mock all app functionality - All pages are a react component (some break up into more components). All functionality is either implemented or mocked and meant to comunicate with the server.
+* [x] React router - I use the react router in app.jsx to handle routing.
+* [x] React hooks - I use at least one react hook in many if not all react components. I use useState, useEffect, and useContext.
 
 ## [Notes](./notes.md)
