@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './vote.css';
 import { NavLink } from 'react-router-dom';
 
-const MIN_VALUE = 0
+const MIN_VALUE = 1
 const MAX_VALUE = 10
 
 function VoteOption(props) {
