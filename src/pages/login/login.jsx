@@ -43,7 +43,7 @@ export default function Login() {
       </header>
       <main className="main">
         <div className="login">
-          <form className="login__form" method="post" action="/login" >
+          <form className="login__form">
             <label className="login-field__label" htmlFor="username">Username</label>
             <input
               className="login-field__input"

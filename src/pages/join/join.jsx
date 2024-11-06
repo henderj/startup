@@ -26,7 +26,7 @@ export default function Join() {
         <h1 className="header__title header__title--center">Join</h1>
       </header>
       <main className="main">
-        <form className="join-form" method="get" action="vote.html">
+        <form className="join-form">
           <label className="join-form__label" htmlFor="code">Enter your QuikVote code:</label>
           <input
             className="join-form__input"
