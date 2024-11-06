@@ -2,10 +2,6 @@ import React, { useState } from 'react';
 import './vote.css';
 import { NavLink } from 'react-router-dom';
 
-/*
-  <title>QuikVote</title>
-  */
-
 const MIN_VALUE = 0
 const MAX_VALUE = 10
 
@@ -77,6 +73,7 @@ function AddOption(props) {
 }
 
 export default function Vote(props) {
+  document.title = 'QuikVote'
   const [options, setOptions] = useState([])
   const [lockedIn, setLockedIn] = useState(false)
   const [copied, setCopied] = useState(false)

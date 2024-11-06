@@ -2,11 +2,8 @@ import React from 'react';
 import './results.css';
 import { NavLink } from 'react-router-dom';
 
-/*
-  <title>Results</title>
-  */
-
 export default function Results() {
+  document.title = 'Results'
   const items = ["Pizza", "Burgers", "Seafood"] // TODO: read from server
   function renderItems() {
     return items.map((item, i) => (

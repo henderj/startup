@@ -3,11 +3,8 @@ import './login.css';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/userContext';
 
-/*
-  <title>Login</title>
-  */
-
 export default function Login() {
+  document.title = 'Login'
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')

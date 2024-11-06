@@ -3,10 +3,6 @@ import './new.css';
 import { NavLink } from 'react-router-dom';
 import { getIconUrlFromSeed } from '../../utils'
 
-/*
-   <title>New QuikVote</title>
-  */
-
 // TODO: move to server
 function generateRandomRoomCode() {
   const alpha = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -24,6 +20,7 @@ function generateRandomRoomCode() {
 }
 
 export default function New() {
+  document.title = 'New QuikVote'
   const [copied, setCopied] = useState(false)
   const [roomCode] = useState(generateRandomRoomCode()) // TODO: get from server
   const iconUrl = getIconUrlFromSeed(roomCode)

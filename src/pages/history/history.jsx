@@ -4,11 +4,8 @@ import { NavLink } from 'react-router-dom';
 import dayjs from 'dayjs'
 import { UserContext } from '../../context/userContext';
 
-/*
-  <title>Past QuikVotes</title>
-  */
-
 export default function History() {
+  document.title = 'Past QuikVotes'
   const { currentUser } = useContext(UserContext)
   const dataArray = [ // TODO: load from server
     {
