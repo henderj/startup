@@ -27,11 +27,6 @@
   color: #666;
 }
 
-.room-code__img {
-  width: 128px;
-  border-radius: 50%;
-}
-
 .room-code__toast {
   visibility: hidden;
   position: absolute;

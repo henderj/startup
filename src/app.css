@@ -105,6 +105,11 @@
   text-decoration: underline;
 }
 
+.room-code__img {
+  width: 128px;
+  border-radius: 50%;
+}
+
 .footer {
   background-color: #1e3a8a;
   color: #fff;

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import './new.css';
 import { NavLink } from 'react-router-dom';
+import { getIconUrlFromSeed } from '../../utils'
 
 /*
    <title>New QuikVote</title>
@@ -25,7 +26,7 @@ function generateRandomRoomCode() {
 export default function New() {
   const [copied, setCopied] = useState(false)
   const [roomCode] = useState(generateRandomRoomCode()) // TODO: get from server
-  const iconUrl = `https://api.dicebear.com/9.x/icons/svg?seed=${roomCode}`
+  const iconUrl = getIconUrlFromSeed(roomCode)
   function copyToClipboard() {
     navigator.clipboard.writeText(roomCode)
     setCopied(true)
@@ -53,7 +54,7 @@ export default function New() {
           <button className="room-code" onClick={copyToClipboard}>
             <b>{roomCode}</b>
             <span className="material-symbols-outlined">content_copy</span>
-            <span className={`room-code__toast ${copied ? 'room-code__toast--visible': ''}`}>Copied</span>
+            <span className={`room-code__toast ${copied ? 'room-code__toast--visible' : ''}`}>Copied</span>
           </button>
           <p className="room-code__note">Share your unique QuikVote with others!</p>
         </div>

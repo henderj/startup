@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './join.css';
 import { NavLink } from 'react-router-dom';
+import { getIconUrlFromSeed } from '../../utils';
 
 /*
   <title>Join QuikVote</title>
   */
 
 export default function Join() {
+  const [roomCode, setRoomCode] = useState('')
+  const iconUrl = getIconUrlFromSeed(roomCode)
+  const MAX_LENGTH = 4
   return (
     <>
       <header className="header header--center-with-back">
@@ -23,10 +27,18 @@ export default function Join() {
       </header>
       <main className="main">
         <form className="join-form" method="get" action="vote.html">
-          <label className="join-form__label" for="code">Enter your QuikVote code:</label>
-          <input className="join-form__input" id="code" name="code" type="text" value="YBD-027" required />
-          <img className="join-form__img" src="../public/icon.svg" alt="icon" />
-          <p>Make sure this icon matches the QuikVote that you want to join:</p>
+          <label className="join-form__label" htmlFor="code">Enter your QuikVote code:</label>
+          <input
+            className="join-form__input"
+            id="code"
+            name="code"
+            type="text"
+            value={roomCode}
+            onChange={(event) => setRoomCode(event.target.value.toUpperCase())}
+            maxLength={MAX_LENGTH}
+            required />
+          <img className="room-code__img join-form__img" src={iconUrl} alt="icon" />
+          <p>Make sure this icon matches the QuikVote that you want to join</p>
           <NavLink className="main__button" to="/vote">Join QuikVote</NavLink>
         </form>
       </main>
