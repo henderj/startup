@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './new.css';
 import { NavLink } from 'react-router-dom';
 import { getIconUrlFromSeed } from '../../utils'
@@ -20,7 +20,9 @@ function generateRandomRoomCode() {
 }
 
 export default function New() {
-  document.title = 'New QuikVote'
+  useEffect(() => {
+    document.title = 'New QuikVote'
+  })
   const [copied, setCopied] = useState(false)
   const [roomCode] = useState(generateRandomRoomCode()) // TODO: get from server
   const iconUrl = getIconUrlFromSeed(roomCode)

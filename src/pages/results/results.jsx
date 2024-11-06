@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './results.css';
 import { NavLink } from 'react-router-dom';
 
 export default function Results() {
-  document.title = 'Results'
+  useEffect(() => {
+    document.title = 'Results'
+  })
   const items = ["Pizza", "Burgers", "Seafood"] // TODO: read from server
   function renderItems() {
     return items.map((item, i) => (

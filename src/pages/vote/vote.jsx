@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './vote.css';
 import { NavLink } from 'react-router-dom';
 
@@ -73,7 +73,9 @@ function AddOption(props) {
 }
 
 export default function Vote(props) {
-  document.title = 'QuikVote'
+  useEffect(() => {
+    document.title = 'QuikVote'
+  })
   const [options, setOptions] = useState([])
   const [lockedIn, setLockedIn] = useState(false)
   const [copied, setCopied] = useState(false)

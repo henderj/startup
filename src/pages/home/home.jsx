@@ -1,10 +1,11 @@
-
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import { UserContext } from '../../context/userContext';
 
 export default function Home() {
-  document.title = 'QuikVote'
+  useEffect(() => {
+    document.title = 'QuikVote'
+  })
   const { currentUser } = useContext(UserContext)
   return (
     <>

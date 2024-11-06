@@ -1,10 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './join.css';
 import { NavLink } from 'react-router-dom';
 import { getIconUrlFromSeed } from '../../utils';
 
 export default function Join() {
-  document.title = 'Join QuikVote'
+  useEffect(() => {
+    document.title = 'Join QuikVote'
+  })
   const [roomCode, setRoomCode] = useState('')
   const iconUrl = getIconUrlFromSeed(roomCode)
   const MAX_LENGTH = 4

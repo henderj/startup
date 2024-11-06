@@ -1,11 +1,13 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import './history.css';
 import { NavLink } from 'react-router-dom';
 import dayjs from 'dayjs'
 import { UserContext } from '../../context/userContext';
 
 export default function History() {
-  document.title = 'Past QuikVotes'
+  useEffect(() => {
+    document.title = 'Past QuikVotes'
+  })
   const { currentUser } = useContext(UserContext)
   const dataArray = [ // TODO: load from server
     {
