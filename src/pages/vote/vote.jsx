@@ -79,6 +79,8 @@ function AddOption(props) {
 export default function Vote(props) {
   const [options, setOptions] = useState([])
   const [lockedIn, setLockedIn] = useState(false)
+  const [copied, setCopied] = useState(false)
+  const roomCode = 'BD82' // TODO: get from server
   function addOption(opt) {
     setOptions([...options, opt])
   }
@@ -90,6 +92,13 @@ export default function Vote(props) {
       <VoteOption name={opt} key={i} />
     ))
   }
+  function copyToClipboard() {
+    navigator.clipboard.writeText(roomCode)
+    setCopied(true)
+    setTimeout(() => {
+      setCopied(false)
+    }, 500);
+  }
   function renderButton() {
     const lockInButton = (<button className="main__button" onClick={() => setLockedIn(true)}>Lock in vote</button>)
     const lockedInButton = (<button className="main__button main__button--disabled" disabled>Locked in</button>)
@@ -99,17 +108,18 @@ export default function Vote(props) {
     if (!lockedIn) {
       return lockInButton
     }
-    if (/*!props.resultsReady*/ false) {
-      // if (context.isRoomOwner) { return closeVoteButton }
+    if (/*!props.resultsReady*/ false) { // TODO: wait until everyone has locked in their votes. determine from server request
+      // if (context.isRoomOwner) { return closeVoteButton } // TODO: only room owner can force close vote. determine from server request
       return lockedInButton
     }
     return viewResultsButton
   }
   return (
     <>
-      <header className="header header--room-code">
-        <h3>YBD-027</h3>
+      <header className="header header--room-code" onClick={copyToClipboard}>
+        <h3>{roomCode}</h3>
         <span className="material-symbols-outlined">content_copy</span>
+        <span className={`header-room-code__toast ${copied ? 'header-room-code__toast--visible' : ''}`}>Copied</span>
       </header>
       <main className="main">
         <ul className="vote-options">

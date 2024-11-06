@@ -1,6 +1,32 @@
 .header--room-code {
   justify-content: center;
   gap: 10px;
+  position: relative;
+  cursor: pointer;
+}
+
+.header-room-code__toast {
+  visibility: hidden;
+  position: absolute;
+  z-index: 1;
+  top: 80%;
+  left: 50%;
+  width: 140px;
+  margin-left: -75px;
+  text-align: center;
+  background-color: white;
+  color: #666;
+  font-size: 1.2em;
+  border-radius: 8px;
+  padding: 5px;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  opacity: 0;
+  transition: opacity 0.3s, visibility 0.3s;
+}
+
+.header-room-code__toast--visible {
+  visibility: visible;
+  opacity: 1;
 }
 
 .vote-options {
