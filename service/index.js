@@ -20,15 +20,15 @@ apiRouter.post('/register', async (req, res) => {
     return
   }
   if (!req.body.email) {
-    res.status(400).send('Bad Request: Missing email')
+    res.status(400).send({ msg: 'Missing email' })
     return
   }
   if (!req.body.username) {
-    res.status(400).send('Bad Request: Missing username')
+    res.status(400).send({ msg: 'Missing username' })
     return
   }
   if (!req.body.password) {
-    res.status(400).send('Bad Request: Missing password')
+    res.status(400).send({ msg: 'Missing password' })
     return
   }
   user = { email: req.body.email, password: req.body.password, token: uuid.v4() };

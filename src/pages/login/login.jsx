@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import './login.css';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { UserContext } from '../../context/userContext';
+import { MessageDialog } from './messageDialog'
 
 export default function Login() {
   useEffect(() => {
@@ -11,15 +12,31 @@ export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
+  const [displayError, setDisplayError] = React.useState(null);
+
   const { setCurrentUser } = useContext(UserContext)
   const navigate = useNavigate()
 
-  function register(event) {
+  async function register(event) {
     event.preventDefault()
     // TODO: call and verify with server
-    setCurrentUser(username)
-    navigate('/')
+
+    const response = await fetch('/api/register', {
+      method: 'POST',
+      body: JSON.stringify({ username, email, password }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      }
+    })
+    if (response.status == 200) {
+      setCurrentUser(username)
+      navigate('/')
+    } else {
+      const body = await response.json();
+      setDisplayError(`⚠ Error: ${body.msg}`);
+    }
   }
+
   function login(event) {
     event.preventDefault()
     // TODO: call and verify with server
@@ -60,7 +77,7 @@ export default function Login() {
               type="email"
               value={email}
               onChange={(event) => setEmail(event.target.value)}
-              required />
+              />
             <label className="login-field__label" htmlFor="password">Password</label>
             <input
               className="login-field__input"
@@ -85,6 +102,8 @@ export default function Login() {
           </form>
         </div>
       </main>
+
+      <MessageDialog message={displayError} onHide={() => setDisplayError(null)} />
     </>
   )
 }
