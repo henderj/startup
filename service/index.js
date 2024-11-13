@@ -11,7 +11,7 @@ app.use(express.json());
 const apiRouter = express.Router();
 app.use('/api', apiRouter);
 
-apiRouter.post('/auth', async (req, res) => {
+apiRouter.post('/register', async (req, res) => {
   let user = users[req.body.email];
   if (user) {
     res.status(409).send({ msg: 'Existing user' });
