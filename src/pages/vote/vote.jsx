@@ -75,7 +75,7 @@ function AddOption(props) {
 export default function Vote(props) {
   useEffect(() => {
     document.title = 'QuikVote'
-  })
+  }, [])
   const [options, setOptions] = useState([])
   const [lockedIn, setLockedIn] = useState(false)
   const [copied, setCopied] = useState(false)

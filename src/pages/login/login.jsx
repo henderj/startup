@@ -7,7 +7,7 @@ import { MessageDialog } from './messageDialog'
 export default function Login() {
   useEffect(() => {
     document.title = 'Login'
-  })
+  }, [])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 

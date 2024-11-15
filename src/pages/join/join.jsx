@@ -6,7 +6,7 @@ import { getIconUrlFromSeed } from '../../utils';
 export default function Join() {
   useEffect(() => {
     document.title = 'Join QuikVote'
-  })
+  }, [])
   const [roomCode, setRoomCode] = useState('')
   const iconUrl = getIconUrlFromSeed(roomCode)
   const MAX_LENGTH = 4

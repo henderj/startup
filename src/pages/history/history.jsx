@@ -7,7 +7,7 @@ import { UserContext } from '../../context/userContext';
 export default function History() {
   useEffect(() => {
     document.title = 'Past QuikVotes'
-  })
+  }, [])
   const { currentUser } = useContext(UserContext)
   const dataArray = [ // TODO: load from server
     {

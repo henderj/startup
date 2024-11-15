@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom';
 export default function Results() {
   useEffect(() => {
     document.title = 'Results'
-  })
+  }, [])
   const items = ["Pizza", "Burgers", "Seafood"] // TODO: read from server
   function renderItems() {
     return items.map((item, i) => (

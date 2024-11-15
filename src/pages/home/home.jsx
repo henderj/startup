@@ -5,7 +5,7 @@ import { UserContext } from '../../context/userContext';
 export default function Home() {
   useEffect(() => {
     document.title = 'QuikVote'
-  })
+  }, [])
   const { currentUser } = useContext(UserContext)
   return (
     <>

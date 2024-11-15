@@ -7,7 +7,7 @@ import { UserContext } from '../../context/userContext';
 export default function New() {
   useEffect(() => {
     document.title = 'New QuikVote'
-  }, []) // TODO: make sure other components do this
+  }, [])
   const { currentUser } = useContext(UserContext)
   const [copied, setCopied] = useState(false)
   const [roomCode, setRoomCode] = useState('')
