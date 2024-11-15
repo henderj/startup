@@ -9,7 +9,6 @@ export default function Login() {
     document.title = 'Login'
   })
   const [username, setUsername] = useState('')
-  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
   const [displayError, setDisplayError] = React.useState(null);
@@ -19,11 +18,9 @@ export default function Login() {
 
   async function register(event) {
     event.preventDefault()
-    // TODO: call and verify with server
-
     const response = await fetch('/api/register', {
       method: 'POST',
-      body: JSON.stringify({ username, email, password }),
+      body: JSON.stringify({ username, password }),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
       }
@@ -37,11 +34,22 @@ export default function Login() {
     }
   }
 
-  function login(event) {
+  async function login(event) {
     event.preventDefault()
-    // TODO: call and verify with server
-    setCurrentUser(username)
-    navigate('/')
+    const response = await fetch('/api/login', {
+      method: 'POST',
+      body: JSON.stringify({ username, password }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      }
+    })
+    if (response.status == 200) {
+      setCurrentUser(username)
+      navigate('/')
+    } else {
+      const body = await response.json();
+      setDisplayError(`⚠ Error: ${body.msg}`);
+    }
   }
   return (
     <>
@@ -69,15 +77,6 @@ export default function Login() {
               value={username}
               onChange={(event) => setUsername(event.target.value)}
               required />
-            <label className="login-field__label" htmlFor="email">Email</label>
-            <input
-              className="login-field__input"
-              id="email"
-              name="email"
-              type="email"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              />
             <label className="login-field__label" htmlFor="password">Password</label>
             <input
               className="login-field__input"
