@@ -6,6 +6,7 @@ export const UserContext = createContext(null)
 /*
   user = {
     username: string
+    token: string
   }
 */
 

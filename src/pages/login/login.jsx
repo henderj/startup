@@ -25,11 +25,11 @@ export default function Login() {
         'Content-type': 'application/json; charset=UTF-8',
       }
     })
+    const body = await response.json();
     if (response.status == 200) {
-      setCurrentUser(username)
+      setCurrentUser({ username, token: body.token })
       navigate('/')
     } else {
-      const body = await response.json();
       setDisplayError(`⚠ Error: ${body.msg}`);
     }
   }
@@ -43,11 +43,11 @@ export default function Login() {
         'Content-type': 'application/json; charset=UTF-8',
       }
     })
+    const body = await response.json();
     if (response.status == 200) {
-      setCurrentUser(username)
+      setCurrentUser({ username, token: body.token })
       navigate('/')
     } else {
-      const body = await response.json();
       setDisplayError(`⚠ Error: ${body.msg}`);
     }
   }

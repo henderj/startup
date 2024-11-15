@@ -1,31 +1,38 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './new.css';
 import { NavLink } from 'react-router-dom';
 import { getIconUrlFromSeed } from '../../utils'
-
-// TODO: move to server
-function generateRandomRoomCode() {
-  const alpha = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-  const numeric = ['2', '3', '4', '5', '6', '7', '8', '9']
-  const alphanumeric = alpha.concat(numeric)
-
-  let code = ''
-  let numChars = 4
-
-  for (let i = 0; i < numChars; i++) {
-    const rand = Math.floor(Math.random() * alphanumeric.length)
-    code += alphanumeric[rand]
-  }
-  return code
-}
+import { UserContext } from '../../context/userContext';
 
 export default function New() {
   useEffect(() => {
     document.title = 'New QuikVote'
-  })
+  }, []) // TODO: make sure other components do this
+  const { currentUser } = useContext(UserContext)
   const [copied, setCopied] = useState(false)
-  const [roomCode] = useState(generateRandomRoomCode()) // TODO: get from server
+  const [roomCode, setRoomCode] = useState('')
   const iconUrl = getIconUrlFromSeed(roomCode)
+
+  useEffect(() => {
+    const fetchData = async () => {
+
+      const response = await fetch('/api/room', {
+        method: 'POST',
+        body: JSON.stringify({ token: currentUser.token }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        }
+      })
+
+      const body = await response.json()
+      if (response.status == 201) {
+        setRoomCode(body.code)
+      }
+    }
+
+    fetchData().catch(console.error)
+  }, [])
+
   function copyToClipboard() {
     navigator.clipboard.writeText(roomCode)
     setCopied(true)

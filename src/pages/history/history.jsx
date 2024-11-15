@@ -46,7 +46,7 @@ export default function History() {
         <h1 className="header__title header__title--center">History</h1>
       </header>
       <main className="main">
-        <h3 className="username">Username: <b>{currentUser}</b></h3>
+        <h3 className="username">Username: <b>{currentUser.username}</b></h3>
         <ol className="history-list">
           {renderItems()}
         </ol>
