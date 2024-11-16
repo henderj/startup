@@ -74,4 +74,14 @@ For this deliverable I converted my app to a React single-page application.
 * [x] React router - I use the react router in app.jsx to handle routing.
 * [x] React hooks - I use at least one react hook in many if not all react components. I use useState, useEffect, and useContext.
 
+## Service Deliverable
+
+For this deliverable I built a backend service for my app.
+
+* [x] Create an HTTP service using Node.js and Express - I created a service in the service/ folder
+* [x] Frontend served up using Express static middleware - I used the express static middleware to serve the public/ directory
+* [x] Your frontend calls third party service endpoints - In home.jsx (the home page), I call the third party 'deckofcards' api to get a random card
+* [x] Your backend provides service endpoints - My service/index.js file provides several endpoints such as login, new vote, get history, etc.
+* [x] Your frontend calls your service endpoints - Most, if not all, front end page components call a backend service
+
 ## [Notes](./notes.md)
