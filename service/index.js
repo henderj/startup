@@ -5,6 +5,7 @@ const app = express();
 const users = new Map()
 const tokens = new Map()
 const rooms = new Map()
+const results = new Map()
 
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
@@ -53,6 +54,9 @@ apiRouter.post('/login', async (req, res) => {
 
   let user = users.get(req.body.username);
   if (user && user.password === req.body.password) {
+    if (user.token) {
+      tokens.delete(user.token)
+    }
     user.token = uuid.v4()
     tokens.set(user.token, user)
     res.send({ token: user.token });
@@ -259,6 +263,19 @@ apiRouter.post('/room/:code/close', async (req, res) => {
 
   room.state = 'closed'
 
+  const totals = Array.from(room.votes)
+    .sort((a, b) => b[1] - a[1])
+    .map(([key]) => key)
+  const resultObj = {
+    results: totals,
+    timestamp: Date.now()
+  }
+  if (results.has(room.owner)) {
+    results.get(room.owner).push(resultObj)
+  } else {
+    results.set(room.owner, [resultObj])
+  }
+
   res.status(200).send({ resultsReady: true })
 })
 
@@ -289,6 +306,22 @@ apiRouter.get('/room/:code/results', async (req, res) => {
 
   res.status(200).send({ results })
 })
+
+apiRouter.get('/history', async (req, res) => {
+  const token = req.get('Authorization')?.split('Bearer ')[1]
+  if (!token || !tokens.has(token)) {
+    res.status(401).send({ msg: 'Must be logged in' })
+    return
+  }
+
+  const user = tokens.get(token)
+
+  const history = results.get(user.username)
+    .sort((a, b) => b.timestamp - a.timestamp)
+
+  res.status(200).send({ history })
+})
+
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`);

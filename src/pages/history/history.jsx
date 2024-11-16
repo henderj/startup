@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './history.css';
 import { NavLink } from 'react-router-dom';
 import dayjs from 'dayjs'
@@ -9,23 +9,28 @@ export default function History() {
     document.title = 'Past QuikVotes'
   }, [])
   const { currentUser } = useContext(UserContext)
-  const dataArray = [ // TODO: load from server
-    {
-      winner: 'Star Wars',
-      runnersUp: ['Lord of the Rings', 'Nacho Libre', 'Pirates of the Carribean', 'Legally Blond', 'The Notebook'],
-      date: '2024-09-19T19:09:00'
-    },
-    {
-      winner: 'Secret Hitler',
-      runnersUp: ['Codenames', 'Exploding Kittens', 'Game 3', 'Game 4', 'Game 5', 'Game 6', 'Game 7'],
-      date: '2024-08-22T18:13:00'
-    },
-    {
-      winner: 'Dogs',
-      runnersUp: ['Cats'],
-      date: '2024-06-03T11:51:00'
+  const [dataArray, setDataArray] = useState([])
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch('/api/history', {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+          'Authorization': `Bearer ${currentUser.token}`
+        }
+      })
+      if (response.status == 200) {
+        const body = await response.json()
+        setDataArray(body.history.map(h => ({
+          winner: h.results[0],
+          runnersUp: h.results.slice(1),
+          date: h.timestamp
+        })))
+      }
     }
-  ]
+    fetchData().catch(console.error)
+  })
   function renderItems() {
     return dataArray.map((data, i) => (
       <HistoryItem key={i} data={data} />
