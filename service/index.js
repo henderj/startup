@@ -179,7 +179,38 @@ apiRouter.post('/room/:code/lockin', async (req, res) => {
   console.log(`votes: ${JSON.stringify(Object.fromEntries(room.votes))}`)
 
   const isOwner = room.owner === user.username
-  res.status(201).send({ resultsReady: false, isOwner })
+  res.status(200).send({ resultsReady: false, isOwner })
+})
+
+apiRouter.post('/room/:code/close', async (req, res) => {
+  if (!req.body.token || !tokens.has(req.body.token)) {
+    res.status(401).send({ msg: 'Must be logged in to lock in vote' })
+    return
+  }
+
+  const user = tokens.get(req.body.token)
+  const roomCode = req.params.code
+  const room = rooms.get(roomCode)
+
+  if (!room) {
+    res.status(404).send({ msg: `Room ${roomCode} does not exist` })
+    return
+  }
+  const isOwner = room.owner === user.username
+
+  if (!isOwner) {
+    res.status(403).send({ msg: 'User is not owner of room' })
+    return
+  }
+
+  if (!room.state === 'open') {
+    res.status(409).send({ msg: 'Room is not open' })
+    return
+  }
+
+  room.state = 'closed'
+
+  res.status(200).send({ resultsReady: true })
 })
 
 app.listen(port, () => {

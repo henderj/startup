@@ -145,7 +145,19 @@ export default function Vote(props) {
       }}
     >Lock in vote</button>)
     const lockedInButton = (<button className="main__button main__button--disabled" disabled>Locked in</button>)
-    const closeVoteButton = (<button className="main__button">Close vote</button>)
+    const closeVoteButton = (<button
+      className="main__button"
+      onClick={() => fetch(`/api/room/${code}/close`, {
+        method: 'POST',
+        body: JSON.stringify({ token: currentUser.token }),
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+        }
+      })
+        .then(res => res.json())
+        .then(j => setIsResultsReady(j.resultsReady))
+      }
+    >Close vote</button>)
     const viewResultsButton = (<NavLink className="main__button" to="/results">View Results</NavLink>)
 
     if (!lockedIn) {
