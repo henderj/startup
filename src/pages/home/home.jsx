@@ -29,11 +29,15 @@ export default function Home() {
         </nav>
       </header>
       <main className="main">
-        <NavLink className="main__button" to="/new">New QuikVote</NavLink>
-        <NavLink className="main__button" to="/join">Join QuikVote</NavLink>
+        {currentUser && (
+          <>
+            <NavLink className="main__button" to="/new">New QuikVote</NavLink>
+            <NavLink className="main__button" to="/join">Join QuikVote</NavLink>
+          </>
+        )}
         {!currentUser &&
           <p className="home__p">
-            <NavLink className="home__link" to="/login">Login/Register</NavLink> to see your past QuikVotes
+            <NavLink className="home__link" to="/login">Login/Register</NavLink> to create or join a QuikVote
           </p>
         }
       </main>
