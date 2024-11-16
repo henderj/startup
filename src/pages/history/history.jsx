@@ -30,7 +30,7 @@ export default function History() {
       }
     }
     fetchData().catch(console.error)
-  })
+  }, [])
   function renderItems() {
     return dataArray.map((data, i) => (
       <HistoryItem key={i} data={data} />
