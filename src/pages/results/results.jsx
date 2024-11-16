@@ -1,12 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './results.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
+import { UserContext } from '../../context/userContext';
 
 export default function Results() {
   useEffect(() => {
     document.title = 'Results'
   }, [])
-  const items = ["Pizza", "Burgers", "Seafood"] // TODO: read from server
+  const [items, setItems] = useState([])
+  const { code } = useParams()
+  const { currentUser } = useContext(UserContext)
+  useEffect(() => {
+    const fetchItems = async () => {
+      const response = await fetch(`/api/room/${code}/results`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8',
+          'Authorization': `Bearer ${currentUser.token}`
+        }
+      })
+      const body = await response.json()
+      setItems(body.results)
+    }
+
+    fetchItems().catch(console.error)
+  }, [])
   function renderItems() {
     return items.map((item, i) => (
       <li className="results-list__item" key={i}>{item}</li>

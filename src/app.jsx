@@ -20,7 +20,7 @@ export default function App() {
             <Route path='/new' element={<New />} />
             <Route path='/join' element={<Join />} />
             <Route path='/vote/:code' element={<Vote />} />
-            <Route path='/results' element={<Results />} />
+            <Route path='/results/:code' element={<Results />} />
             <Route path='/history' element={<History />} />
             <Route path='/login' element={<Login />} />
             <Route path='/*' element={<NotFound />} />

@@ -88,9 +88,10 @@ export default function Vote(props) {
   async function addOption(opt) {
     const response = await fetch(`/api/room/${code}/options`, {
       method: 'POST',
-      body: JSON.stringify({ token: currentUser.token, option: opt }),
+      body: JSON.stringify({ option: opt }),
       headers: {
         'Content-type': 'application/json; charset=UTF-8',
+        'Authorization': `Bearer ${currentUser.token}`
       }
     })
     if (response.status !== 201) {
@@ -132,9 +133,10 @@ export default function Vote(props) {
         setLockedIn(true)
         fetch(`/api/room/${code}/lockin`, {
           method: 'POST',
-          body: JSON.stringify({ token: currentUser.token, votes: Object.fromEntries(values) }),
+          body: JSON.stringify({ votes: Object.fromEntries(values) }),
           headers: {
             'Content-type': 'application/json; charset=UTF-8',
+            'Authorization': `Bearer ${currentUser.token}`
           }
         })
           .then(res => res.json())
@@ -149,16 +151,19 @@ export default function Vote(props) {
       className="main__button"
       onClick={() => fetch(`/api/room/${code}/close`, {
         method: 'POST',
-        body: JSON.stringify({ token: currentUser.token }),
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
+          'Authorization': `Bearer ${currentUser.token}`
         }
       })
         .then(res => res.json())
         .then(j => setIsResultsReady(j.resultsReady))
       }
     >Close vote</button>)
-    const viewResultsButton = (<NavLink className="main__button" to="/results">View Results</NavLink>)
+    const viewResultsButton = (<NavLink
+      className="main__button"
+      to={`/results/${code}`}
+    >View Results</NavLink>)
 
     if (!lockedIn) {
       return lockInButton

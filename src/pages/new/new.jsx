@@ -18,9 +18,9 @@ export default function New() {
     const fetchData = async () => {
       const response = await fetch('/api/room', {
         method: 'POST',
-        body: JSON.stringify({ token: currentUser.token }),
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
+          'Authorization': `Bearer ${currentUser.token}`
         }
       })
 
