@@ -12,10 +12,10 @@ export default function New() {
   const [copied, setCopied] = useState(false)
   const [roomCode, setRoomCode] = useState('')
   const iconUrl = getIconUrlFromSeed(roomCode)
+  const navUrl = `/vote/${roomCode}`
 
   useEffect(() => {
     const fetchData = async () => {
-
       const response = await fetch('/api/room', {
         method: 'POST',
         body: JSON.stringify({ token: currentUser.token }),
@@ -64,7 +64,7 @@ export default function New() {
           </button>
           <p className="room-code__note">Share your unique QuikVote with others!</p>
         </div>
-        <NavLink className="main__button" to="/vote">Begin QuikVote</NavLink>
+        <NavLink className="main__button" to={navUrl}>Begin QuikVote</NavLink>
       </main>
     </>
   )

@@ -1,23 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './vote.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useParams } from 'react-router-dom';
+import { UserContext } from '../../context/userContext';
 
-const MIN_VALUE = 1
+const MIN_VALUE = 0
 const MAX_VALUE = 10
 
 function VoteOption(props) {
-  const [value, setValue] = useState(5)
   function increaseValue() {
-    if (value == MAX_VALUE) {
+    if (props.value == MAX_VALUE) {
       return
     }
-    setValue(value + 1)
+    props.setValue(props.value + 1)
   }
   function decreaseValue() {
-    if (value == MIN_VALUE) {
+    if (props.value == MIN_VALUE) {
       return
     }
-    setValue(value - 1)
+    props.setValue(props.value - 1)
   }
   return (
     <li className="vote-options__item">{props.name}
@@ -25,7 +25,7 @@ function VoteOption(props) {
         <button className="vote-buttons__button" onClick={decreaseValue}>
           <span className="material-symbols-outlined">arrow_downward</span>
         </button>
-        <span className="vote-buttons__value">{value}</span>
+        <span className="vote-buttons__value">{props.value}</span>
         <button className="vote-buttons__button" onClick={increaseValue}>
           <span className="material-symbols-outlined">arrow_upward</span>
         </button>
@@ -77,29 +77,73 @@ export default function Vote(props) {
     document.title = 'QuikVote'
   }, [])
   const [options, setOptions] = useState([])
+  const [values, setValues] = useState(new Map())
   const [lockedIn, setLockedIn] = useState(false)
+  const [isRoomOwner, setIsRoomOwner] = useState(false)
+  const [resultsReady, setIsResultsReady] = useState(false)
   const [copied, setCopied] = useState(false)
-  const roomCode = 'BD82' // TODO: get from server
-  function addOption(opt) {
-    setOptions([...options, opt])
+  const { currentUser } = useContext(UserContext)
+  const { code } = useParams()
+
+  async function addOption(opt) {
+    const response = await fetch(`/api/room/${code}/options`, {
+      method: 'POST',
+      body: JSON.stringify({ token: currentUser.token, option: opt }),
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      }
+    })
+    if (response.status !== 201) {
+      return
+    }
+    const body = await response.json()
+    body.options.forEach(opt => {
+      if (!values.has(opt)) {
+        values.set(opt, 5)
+      }
+    })
+    setValues(new Map(values))
+    setOptions(body.options)
   }
   function renderOptions() {
     if (options.length == 0) {
       return (<p>Add an option...</p>)
     }
     return options.map((opt, i) => (
-      <VoteOption name={opt} key={i} />
+      <VoteOption
+        name={opt}
+        key={i}
+        value={values.get(opt)}
+        setValue={(val) => setValues(new Map(values.set(opt, val)))}
+      />
     ))
   }
   function copyToClipboard() {
-    navigator.clipboard.writeText(roomCode)
+    navigator.clipboard.writeText(code)
     setCopied(true)
     setTimeout(() => {
       setCopied(false)
     }, 500);
   }
   function renderButton() {
-    const lockInButton = (<button className="main__button" onClick={() => setLockedIn(true)}>Lock in vote</button>)
+    const lockInButton = (<button
+      className="main__button"
+      onClick={() => {
+        setLockedIn(true)
+        fetch(`/api/room/${code}/lockin`, {
+          method: 'POST',
+          body: JSON.stringify({ token: currentUser.token, votes: Object.fromEntries(values) }),
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+          }
+        })
+          .then(res => res.json())
+          .then(j => {
+            setIsRoomOwner(j.isOwner)
+            setIsResultsReady(j.resultsReady)
+          })
+      }}
+    >Lock in vote</button>)
     const lockedInButton = (<button className="main__button main__button--disabled" disabled>Locked in</button>)
     const closeVoteButton = (<button className="main__button">Close vote</button>)
     const viewResultsButton = (<NavLink className="main__button" to="/results">View Results</NavLink>)
@@ -107,8 +151,8 @@ export default function Vote(props) {
     if (!lockedIn) {
       return lockInButton
     }
-    if (/*!props.resultsReady*/ false) { // TODO: wait until everyone has locked in their votes. determine from server request
-      // if (context.isRoomOwner) { return closeVoteButton } // TODO: only room owner can force close vote. determine from server request
+    if (!resultsReady) {
+      if (isRoomOwner) { return closeVoteButton }
       return lockedInButton
     }
     return viewResultsButton
@@ -116,7 +160,7 @@ export default function Vote(props) {
   return (
     <>
       <header className="header header--room-code" onClick={copyToClipboard}>
-        <h3>{roomCode}</h3>
+        <h3>{code}</h3>
         <span className="material-symbols-outlined">content_copy</span>
         <span className={`header-room-code__toast ${copied ? 'header-room-code__toast--visible' : ''}`}>Copied</span>
       </header>
