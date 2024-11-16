@@ -56,7 +56,9 @@ export default function New() {
       </header>
       <main className="main">
         <div>
-          <img src={iconUrl} alt="icon" className="room-code__img" />
+          {roomCode !== '' && (
+            <img src={iconUrl} alt="icon" className="room-code__img" />
+          )}
           <button className="room-code" onClick={copyToClipboard}>
             <b>{roomCode}</b>
             <span className="material-symbols-outlined">content_copy</span>
