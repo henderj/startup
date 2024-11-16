@@ -53,9 +53,6 @@ apiRouter.post('/login', async (req, res) => {
 
   let user = users.get(req.body.username);
   if (user && user.password === req.body.password) {
-    if (user.token) {
-      tokens.delete(user.token)
-    }
     user.token = uuid.v4()
     tokens.set(user.token, user)
     res.send({ token: user.token });
@@ -79,7 +76,6 @@ function generateRandomRoomCode() {
   return code
 }
 
-
 apiRouter.post('/room', async (req, res) => {
   const token = req.get('Authorization')?.split('Bearer ')[1]
   if (!token || !tokens.has(token)) {
@@ -93,7 +89,7 @@ apiRouter.post('/room', async (req, res) => {
   const newRoom = {
     code: roomCode,
     owner: user.username,
-    participants: [user.username],
+    participants: new Set([user.username]),
     options: [],
     votes: new Map(),
     state: 'open'
@@ -102,6 +98,55 @@ apiRouter.post('/room', async (req, res) => {
   rooms.set(roomCode, newRoom)
 
   res.status(201).send(newRoom)
+})
+
+apiRouter.get('/room/:code', async (req, res) => {
+  const token = req.get('Authorization')?.split('Bearer ')[1]
+  if (!token || !tokens.has(token)) {
+    res.status(401).send({ msg: 'Must be logged in' })
+    return
+  }
+
+  const roomCode = req.params.code
+  const room = rooms.get(roomCode)
+
+  if (!room) {
+    res.status(404).send({ msg: `Room ${roomCode} does not exist` })
+    return
+  }
+
+  if (!room.state === 'open') {
+    res.status(409).send({ msg: 'Room is not open' })
+    return
+  }
+
+  res.status(200).send()
+})
+
+apiRouter.post('/room/:code/join', async (req, res) => {
+  const token = req.get('Authorization')?.split('Bearer ')[1]
+  if (!token || !tokens.has(token)) {
+    res.status(401).send({ msg: 'Must be logged in' })
+    return
+  }
+
+  const user = tokens.get(token)
+  const roomCode = req.params.code
+  const room = rooms.get(roomCode)
+
+  if (!room) {
+    res.status(404).send({ msg: `Room ${roomCode} does not exist` })
+    return
+  }
+
+  if (!room.state === 'open') {
+    res.status(409).send({ msg: 'Room is not open' })
+    return
+  }
+
+  room.participants.add(user.username)
+
+  res.status(200).send()
 })
 
 apiRouter.post('/room/:code/options', async (req, res) => {
@@ -129,7 +174,7 @@ apiRouter.post('/room/:code/options', async (req, res) => {
     return
   }
 
-  if (!room.participants.includes(user.username)) {
+  if (!room.participants.has(user.username)) {
     res.status(403).send({ msg: 'User is not allowed to add options to room' })
     return
   }
@@ -171,7 +216,7 @@ apiRouter.post('/room/:code/lockin', async (req, res) => {
     return
   }
 
-  if (!room.participants.includes(user.username)) {
+  if (!room.participants.has(user.username)) {
     res.status(403).send({ msg: 'User is not allowed to participate in room' })
     return
   }

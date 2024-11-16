@@ -1,15 +1,47 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import './join.css';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { getIconUrlFromSeed } from '../../utils';
+import { UserContext } from '../../context/userContext';
 
 export default function Join() {
   useEffect(() => {
     document.title = 'Join QuikVote'
   }, [])
   const [roomCode, setRoomCode] = useState('')
+  const [btnEnabled, setBtnEnabled] = useState(false)
+  const { currentUser } = useContext(UserContext)
   const iconUrl = getIconUrlFromSeed(roomCode)
+  const navigate = useNavigate()
   const MAX_LENGTH = 4
+  async function onCodeChange(newVal) {
+    setRoomCode(newVal)
+    if (newVal.length == 4) {
+      setBtnEnabled(true)
+    } else {
+      setBtnEnabled(false)
+    }
+  }
+
+  async function onBtnClick(event) {
+    event.preventDefault()
+    setBtnEnabled(false)
+    console.log('here')
+    const response = await fetch(`/api/room/${roomCode}/join`, {
+      method: 'POST',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+        'Authorization': `Bearer ${currentUser.token}`
+      }
+    })
+    console.log('after')
+    if (response.status == 200) {
+      navigate(`/vote/${roomCode}`)
+    } else {
+      setBtnEnabled(true)
+    }
+  }
+
   return (
     <>
       <header className="header header--center-with-back">
@@ -33,12 +65,12 @@ export default function Join() {
             name="code"
             type="text"
             value={roomCode}
-            onChange={(event) => setRoomCode(event.target.value.toUpperCase())}
+            onChange={(event) => onCodeChange(event.target.value.toUpperCase())}
             maxLength={MAX_LENGTH}
             required />
           <img className="room-code__img join-form__img" src={iconUrl} alt="icon" />
           <p>Make sure this icon matches the QuikVote that you want to join</p>
-          <NavLink className="main__button" to="/vote">Join QuikVote</NavLink>
+          <button onClick={onBtnClick} className={`main__button ${btnEnabled ? '' : 'main__button--disabled'}`} >Join QuikVote</button>
         </form>
       </main>
     </>
