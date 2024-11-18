@@ -1,5 +1,23 @@
 const express = require('express');
 const uuid = require('uuid');
+const { MongoClient } = require('mongodb');
+const dbconfig = require('./dbconfig.json')
+const dbUrl = dbconfig.url
+
+const client = new MongoClient(dbUrl)
+const db = client.db('quikvote')
+
+async function testConnection() {
+  await client.connect()
+  await db.command({ ping: 1 })
+}
+testConnection()
+  .then(() => console.log('db connected'))
+  .catch(ex => {
+    console.log(`Unable to connect to database with ${dbUrl} because ${ex.message}`);
+    process.exit(1)
+  })
+
 const app = express();
 
 const users = new Map()
