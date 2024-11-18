@@ -1,34 +1,16 @@
 const express = require('express');
-const uuid = require('uuid');
-const { MongoClient } = require('mongodb');
-const dbconfig = require('./dbconfig.json')
-const dbUrl = dbconfig.url
-
-const client = new MongoClient(dbUrl)
-const db = client.db('quikvote')
-
-async function testConnection() {
-  await client.connect()
-  await db.command({ ping: 1 })
-}
-testConnection()
-  .then(() => console.log('db connected'))
-  .catch(ex => {
-    console.log(`Unable to connect to database with ${dbUrl} because ${ex.message}`);
-    process.exit(1)
-  })
+const bcrypt = require('bcrypt')
+const cookieParser = require('cookie-parser')
+const DB = require('./database.js');
 
 const app = express();
 
-const users = new Map()
-const tokens = new Map()
-const rooms = new Map()
-const results = new Map()
+const authCookieName = 'token';
 
 const port = process.argv.length > 2 ? process.argv[2] : 4000;
 
 app.use(express.json());
-
+app.use(cookieParser());
 app.use(express.static('public'));
 
 const apiRouter = express.Router();
@@ -44,20 +26,16 @@ apiRouter.post('/register', async (req, res) => {
     return
   }
 
-  let user = users.get(req.body.username);
+  let user = await DB.getUser(req.body.username)
   if (user) {
     res.status(409).send({ msg: 'Existing user' });
     return
   }
-  user = {
-    username: req.body.username,
-    password: req.body.password,
-    token: uuid.v4()
-  };
-  users.set(user.username, user)
-  tokens.set(user.token, user)
 
-  res.send({ token: user.token });
+  user = await DB.createUser(req.body.username, req.body.password)
+  setAuthCookie(res, user.token);
+
+  res.status(201).send({ username: user.username });
 });
 
 apiRouter.post('/login', async (req, res) => {
@@ -70,16 +48,37 @@ apiRouter.post('/login', async (req, res) => {
     return
   }
 
-  let user = users.get(req.body.username);
-  if (user && user.password === req.body.password) {
-    if (user.token) {
-      tokens.delete(user.token)
-    }
-    user.token = uuid.v4()
-    tokens.set(user.token, user)
-    res.send({ token: user.token });
+  const user = await DB.getUser(req.body.username)
+
+  if (user && await bcrypt.compare(req.body.password, user.password)) {
+    setAuthCookie(res, user.token);
+    res.status(200).send({ username: user.username });
   } else {
     res.status(400).send({ msg: 'Invalid username and/or password' })
+  }
+});
+
+apiRouter.delete('/logout', (_req, res) => {
+  res.clearCookie(authCookieName);
+  res.status(204).end();
+})
+
+
+async function getUser(req) {
+  const authToken = req.cookies[authCookieName];
+  const user = await DB.getUserByToken(authToken);
+  return user
+}
+
+const secureApiRouter = express.Router();
+apiRouter.use(secureApiRouter);
+
+secureApiRouter.use(async (req, res, next) => {
+  const user = await getUser(req)
+  if (user) {
+    next();
+  } else {
+    res.status(401).send({ msg: 'Unauthorized' });
   }
 });
 
@@ -98,14 +97,8 @@ function generateRandomRoomCode() {
   return code
 }
 
-apiRouter.post('/room', async (req, res) => {
-  const token = req.get('Authorization')?.split('Bearer ')[1]
-  if (!token || !tokens.has(token)) {
-    res.status(401).send({ msg: 'Must be logged in' })
-    return
-  }
-
-  const user = tokens.get(token)
+secureApiRouter.post('/room', async (req, res) => {
+  const user = await getUser(req)
   const roomCode = generateRandomRoomCode()
 
   const newRoom = {
@@ -122,13 +115,7 @@ apiRouter.post('/room', async (req, res) => {
   res.status(201).send(newRoom)
 })
 
-apiRouter.get('/room/:code', async (req, res) => {
-  const token = req.get('Authorization')?.split('Bearer ')[1]
-  if (!token || !tokens.has(token)) {
-    res.status(401).send({ msg: 'Must be logged in' })
-    return
-  }
-
+secureApiRouter.get('/room/:code', async (req, res) => {
   const roomCode = req.params.code
   const room = rooms.get(roomCode)
 
@@ -145,14 +132,8 @@ apiRouter.get('/room/:code', async (req, res) => {
   res.status(200).send()
 })
 
-apiRouter.post('/room/:code/join', async (req, res) => {
-  const token = req.get('Authorization')?.split('Bearer ')[1]
-  if (!token || !tokens.has(token)) {
-    res.status(401).send({ msg: 'Must be logged in' })
-    return
-  }
-
-  const user = tokens.get(token)
+secureApiRouter.post('/room/:code/join', async (req, res) => {
+  const user = await getUser(req)
   const roomCode = req.params.code
   const room = rooms.get(roomCode)
 
@@ -171,18 +152,13 @@ apiRouter.post('/room/:code/join', async (req, res) => {
   res.status(200).send()
 })
 
-apiRouter.post('/room/:code/options', async (req, res) => {
-  const token = req.get('Authorization')?.split('Bearer ')[1]
-  if (!token || !tokens.has(token)) {
-    res.status(401).send({ msg: 'Must be logged in' })
-    return
-  }
+secureApiRouter.post('/room/:code/options', async (req, res) => {
   if (!req.body.option) {
     res.status(400).send({ msg: 'Missing option' })
     return
   }
 
-  const user = tokens.get(token)
+  const user = await getUser(req)
   const roomCode = req.params.code
   const room = rooms.get(roomCode)
 
@@ -212,19 +188,13 @@ apiRouter.post('/room/:code/options', async (req, res) => {
   res.status(201).send({ options: room.options })
 })
 
-apiRouter.post('/room/:code/lockin', async (req, res) => {
-  const token = req.get('Authorization')?.split('Bearer ')[1]
-  if (!token || !tokens.has(token)) {
-    res.status(401).send({ msg: 'Must be logged in' })
-    return
-  }
-
+secureApiRouter.post('/room/:code/lockin', async (req, res) => {
   if (!req.body.votes) {
     res.status(400).send({ msg: 'Missing votes' })
     return
   }
 
-  const user = tokens.get(token)
+  const user = await getUser(req)
   const roomCode = req.params.code
   const room = rooms.get(roomCode)
 
@@ -252,14 +222,8 @@ apiRouter.post('/room/:code/lockin', async (req, res) => {
   res.status(200).send({ resultsReady: false, isOwner })
 })
 
-apiRouter.post('/room/:code/close', async (req, res) => {
-  const token = req.get('Authorization')?.split('Bearer ')[1]
-  if (!token || !tokens.has(token)) {
-    res.status(401).send({ msg: 'Must be logged in' })
-    return
-  }
-
-  const user = tokens.get(token)
+secureApiRouter.post('/room/:code/close', async (req, res) => {
+  const user = await getUser(req)
   const roomCode = req.params.code
   const room = rooms.get(roomCode)
 
@@ -297,13 +261,7 @@ apiRouter.post('/room/:code/close', async (req, res) => {
   res.status(200).send({ resultsReady: true })
 })
 
-apiRouter.get('/room/:code/results', async (req, res) => {
-  const token = req.get('Authorization')?.split('Bearer ')[1]
-  if (!token || !tokens.has(token)) {
-    res.status(401).send({ msg: 'Must be logged in' })
-    return
-  }
-
+secureApiRouter.get('/room/:code/results', async (req, res) => {
   const roomCode = req.params.code
   const room = rooms.get(roomCode)
 
@@ -325,14 +283,8 @@ apiRouter.get('/room/:code/results', async (req, res) => {
   res.status(200).send({ results })
 })
 
-apiRouter.get('/history', async (req, res) => {
-  const token = req.get('Authorization')?.split('Bearer ')[1]
-  if (!token || !tokens.has(token)) {
-    res.status(401).send({ msg: 'Must be logged in' })
-    return
-  }
-
-  const user = tokens.get(token)
+secureApiRouter.get('/history', async (req, res) => {
+  const user = await getUser(req)
 
   const history = results.get(user.username)
     .sort((a, b) => b.timestamp - a.timestamp)
@@ -340,7 +292,22 @@ apiRouter.get('/history', async (req, res) => {
   res.status(200).send({ history })
 })
 
+app.use(function(err, _req, res, _next) {
+  res.status(500).send({ type: err.name, message: err.message });
+});
 
-app.listen(port, () => {
+app.use((_req, res) => {
+  res.sendFile('index.html', { root: 'public' });
+});
+
+function setAuthCookie(res, authToken) {
+  res.cookie(authCookieName, authToken, {
+    secure: true,
+    httpOnly: true,
+    sameSite: 'strict',
+  });
+}
+
+const httpService = app.listen(port, () => {
   console.log(`Listening on port ${port}`);
 });

@@ -26,8 +26,8 @@ export default function Login() {
       }
     })
     const body = await response.json();
-    if (response.status == 200) {
-      setCurrentUser({ username, token: body.token })
+    if (response.status == 201) {
+      setCurrentUser({ username })
       navigate('/')
     } else {
       setDisplayError(`⚠ Error: ${body.msg}`);
@@ -45,7 +45,7 @@ export default function Login() {
     })
     const body = await response.json();
     if (response.status == 200) {
-      setCurrentUser({ username, token: body.token })
+      setCurrentUser({ username })
       navigate('/')
     } else {
       setDisplayError(`⚠ Error: ${body.msg}`);
