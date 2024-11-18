@@ -84,4 +84,15 @@ For this deliverable I built a backend service for my app.
 * [x] Your backend provides service endpoints - My service/index.js file provides several endpoints such as login, new vote, get history, etc.
 * [x] Your frontend calls your service endpoints - Most, if not all, front end page components call a backend service
 
+## Login Deliverable
+
+For this deliverable I connected my app to MongoDB for authentication and other persistent data
+
+Application authentication and authorization
+* [ ] Supports new user registration
+* [ ] Supports existing user authentication and logout
+* [ ] Stores application data in MongoDB
+* [ ] Stores and retrieves credentials in MongoDB
+* [ ] Restricts application functionality based upon authentication
+
 ## [Notes](./notes.md)
