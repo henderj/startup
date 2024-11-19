@@ -13,7 +13,7 @@ export default function Login() {
 
   const [displayError, setDisplayError] = React.useState(null);
 
-  const { setCurrentUser } = useContext(UserContext)
+  const { currentUser, setCurrentUser } = useContext(UserContext)
   const navigate = useNavigate()
 
   async function register(event) {
@@ -51,6 +51,23 @@ export default function Login() {
       setDisplayError(`⚠ Error: ${body.msg}`);
     }
   }
+
+  async function logout(event) {
+    event.preventDefault()
+    const response = await fetch('/api/logout', {
+      method: 'DELETE',
+      headers: {
+        'Content-type': 'application/json; charset=UTF-8',
+      }
+    })
+    if (response.status == 204) {
+      setCurrentUser(null)
+      // navigate('/')
+    } else {
+      setDisplayError(`⚠ Error: ${body.msg}`);
+    }
+  }
+
   return (
     <>
       <header className="header header--center-with-back">
@@ -68,39 +85,48 @@ export default function Login() {
       <main className="main">
         <div className="login">
           <form className="login__form">
-            <label className="login-field__label" htmlFor="username">Username</label>
-            <input
-              className="login-field__input"
-              id="username"
-              name="username"
-              type="text"
-              value={username}
-              onChange={(event) => setUsername(event.target.value)}
-              required />
-            <label className="login-field__label" htmlFor="password">Password</label>
-            <input
-              className="login-field__input"
-              id="password"
-              name="password"
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
-              required />
-            <button
-              className="main__button"
-              type="submit"
-              name="action"
-              value="login"
-              onClick={login}>Login</button>
-            <button
-              className="main__button"
-              type="submit"
-              name="action"
-              value="register"
-              onClick={register}>Register</button>
+            {currentUser && (
+              <>
+                <p>Username: <b>{currentUser.username}</b></p>
+                <button
+                  className="main__button"
+                  name="action"
+                  value="register"
+                  onClick={logout}
+                >Logout</button>
+              </>
+            )}
+            {!currentUser && (
+              <>
+                <label className="login-field__label" htmlFor="username">Username</label>
+                <input
+                  className="login-field__input"
+                  id="username"
+                  name="username"
+                  type="text"
+                  value={username}
+                  onChange={(event) => setUsername(event.target.value)}
+                  required />
+                <label className="login-field__label" htmlFor="password">Password</label>
+                <input
+                  className="login-field__input"
+                  id="password"
+                  name="password"
+                  type="password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                  required />
+                <button
+                  className="main__button"
+                  onClick={login}>Login</button>
+                <button
+                  className="main__button"
+                  onClick={register}>Register</button>
+              </>
+            )}
           </form>
         </div>
-      </main>
+      </main >
 
       <MessageDialog message={displayError} onHide={() => setDisplayError(null)} />
     </>
