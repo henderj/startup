@@ -42,8 +42,38 @@ async function createUser(username, password) {
   return user;
 }
 
+function generateRandomRoomCode() {
+  const alpha = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+  const numeric = ['2', '3', '4', '5', '6', '7', '8', '9']
+  const alphanumeric = alpha.concat(numeric)
+
+  let code = ''
+  let numChars = 4
+
+  for (let i = 0; i < numChars; i++) {
+    const rand = Math.floor(Math.random() * alphanumeric.length)
+    code += alphanumeric[rand]
+  }
+  return code
+}
+
+async function createRoom(creatorUsername) {
+  const newRoom = {
+    code: generateRandomRoomCode(),
+    owner: creatorUsername,
+    participants: [creatorUsername],
+    options: [],
+    votes: {},
+    state: 'open'
+  }
+  await roomsCollection.insertOne(newRoom)
+
+  return newRoom.code
+}
+
 module.exports = {
   getUser,
   getUserByToken,
-  createUser
+  createUser,
+  createRoom
 };

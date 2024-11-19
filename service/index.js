@@ -90,37 +90,12 @@ secureApiRouter.use(async (req, res, next) => {
   }
 });
 
-function generateRandomRoomCode() {
-  const alpha = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'J', 'K', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-  const numeric = ['2', '3', '4', '5', '6', '7', '8', '9']
-  const alphanumeric = alpha.concat(numeric)
-
-  let code = ''
-  let numChars = 4
-
-  for (let i = 0; i < numChars; i++) {
-    const rand = Math.floor(Math.random() * alphanumeric.length)
-    code += alphanumeric[rand]
-  }
-  return code
-}
-
 secureApiRouter.post('/room', async (req, res) => {
   const user = await getUserFromRequest(req)
-  const roomCode = generateRandomRoomCode()
 
-  const newRoom = {
-    code: roomCode,
-    owner: user.username,
-    participants: new Set([user.username]),
-    options: [],
-    votes: new Map(),
-    state: 'open'
-  }
+  const newRoomCode = await DB.createRoom(user.username)
 
-  rooms.set(roomCode, newRoom)
-
-  res.status(201).send(newRoom)
+  res.status(201).send({ code: newRoomCode })
 })
 
 secureApiRouter.get('/room/:code', async (req, res) => {

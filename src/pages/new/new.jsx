@@ -8,7 +8,6 @@ export default function New() {
   useEffect(() => {
     document.title = 'New QuikVote'
   }, [])
-  const { currentUser } = useContext(UserContext)
   const [copied, setCopied] = useState(false)
   const [roomCode, setRoomCode] = useState('')
   const iconUrl = getIconUrlFromSeed(roomCode)
@@ -19,8 +18,7 @@ export default function New() {
       const response = await fetch('/api/room', {
         method: 'POST',
         headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-          'Authorization': `Bearer ${currentUser.token}`
+          'Content-type': 'application/json; charset=UTF-8'
         }
       })
 
