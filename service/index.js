@@ -63,18 +63,26 @@ apiRouter.delete('/logout', (_req, res) => {
   res.status(204).end();
 })
 
-
-async function getUser(req) {
+async function getUserFromRequest(req) {
   const authToken = req.cookies[authCookieName];
   const user = await DB.getUserByToken(authToken);
   return user
 }
 
+apiRouter.get('/me', async (req, res) => {
+  const user = await getUserFromRequest(req)
+  if (user) {
+    res.status(200).send({ username: user.username })
+  } else {
+    res.status(204).end()
+  }
+})
+
 const secureApiRouter = express.Router();
 apiRouter.use(secureApiRouter);
 
 secureApiRouter.use(async (req, res, next) => {
-  const user = await getUser(req)
+  const user = await getUserFromRequest(req)
   if (user) {
     next();
   } else {
@@ -98,7 +106,7 @@ function generateRandomRoomCode() {
 }
 
 secureApiRouter.post('/room', async (req, res) => {
-  const user = await getUser(req)
+  const user = await getUserFromRequest(req)
   const roomCode = generateRandomRoomCode()
 
   const newRoom = {
@@ -133,7 +141,7 @@ secureApiRouter.get('/room/:code', async (req, res) => {
 })
 
 secureApiRouter.post('/room/:code/join', async (req, res) => {
-  const user = await getUser(req)
+  const user = await getUserFromRequest(req)
   const roomCode = req.params.code
   const room = rooms.get(roomCode)
 
@@ -158,7 +166,7 @@ secureApiRouter.post('/room/:code/options', async (req, res) => {
     return
   }
 
-  const user = await getUser(req)
+  const user = await getUserFromRequest(req)
   const roomCode = req.params.code
   const room = rooms.get(roomCode)
 
@@ -194,7 +202,7 @@ secureApiRouter.post('/room/:code/lockin', async (req, res) => {
     return
   }
 
-  const user = await getUser(req)
+  const user = await getUserFromRequest(req)
   const roomCode = req.params.code
   const room = rooms.get(roomCode)
 
@@ -223,7 +231,7 @@ secureApiRouter.post('/room/:code/lockin', async (req, res) => {
 })
 
 secureApiRouter.post('/room/:code/close', async (req, res) => {
-  const user = await getUser(req)
+  const user = await getUserFromRequest(req)
   const roomCode = req.params.code
   const room = rooms.get(roomCode)
 
@@ -284,7 +292,7 @@ secureApiRouter.get('/room/:code/results', async (req, res) => {
 })
 
 secureApiRouter.get('/history', async (req, res) => {
-  const user = await getUser(req)
+  const user = await getUserFromRequest(req)
 
   const history = results.get(user.username)
     .sort((a, b) => b.timestamp - a.timestamp)
