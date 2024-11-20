@@ -19,7 +19,7 @@ export default function App() {
             <Route path='/' element={<Home />} exact />
             <Route path='/new' element={<New />} />
             <Route path='/join' element={<Join />} />
-            <Route path='/vote/:code' element={<Vote />} />
+            <Route path='/vote/:id' element={<Vote />} />
             <Route path='/results/:id' element={<Results />} />
             <Route path='/history' element={<History />} />
             <Route path='/login' element={<Login />} />

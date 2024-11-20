@@ -93,17 +93,17 @@ secureApiRouter.use(async (req, res, next) => {
 secureApiRouter.post('/room', async (req, res) => {
   const user = await getUserFromRequest(req)
 
-  const newRoomCode = await DB.createRoom(user.username)
+  const newRoom = await DB.createRoom(user.username)
 
-  res.status(201).send({ code: newRoomCode })
+  res.status(201).send({ id: newRoom.id, code: newRoom.code })
 })
 
-secureApiRouter.get('/room/:code', async (req, res) => {
-  const roomCode = req.params.code
-  const room = await DB.getRoom(roomCode)
+secureApiRouter.get('/room/:id', async (req, res) => {
+  const roomId = req.params.id
+  const room = await DB.getRoomById(roomId)
 
   if (!room) {
-    res.status(404).send({ msg: `Room ${roomCode} does not exist` })
+    res.status(404).send({ msg: `Room ${roomId} does not exist` })
     return
   }
 
@@ -118,7 +118,7 @@ secureApiRouter.get('/room/:code', async (req, res) => {
 secureApiRouter.post('/room/:code/join', async (req, res) => {
   const user = await getUserFromRequest(req)
   const roomCode = req.params.code
-  const room = await DB.getRoom(roomCode)
+  const room = await DB.getRoomByCode(roomCode)
 
   if (!room) {
     res.status(404).send({ msg: `Room ${roomCode} does not exist` })
@@ -133,24 +133,24 @@ secureApiRouter.post('/room/:code/join', async (req, res) => {
   const success = await DB.addParticipantToRoom(roomCode, user.username)
 
   if (success) {
-    res.status(200).send()
+    res.status(200).send({ id: room._id })
   } else {
     res.status(500).send({ msg: 'error adding participant' })
   }
 })
 
-secureApiRouter.post('/room/:code/options', async (req, res) => {
+secureApiRouter.post('/room/:id/options', async (req, res) => {
   if (!req.body.option) {
     res.status(400).send({ msg: 'Missing option' })
     return
   }
 
   const user = await getUserFromRequest(req)
-  const roomCode = req.params.code
-  const room = await DB.getRoom(roomCode)
+  const roomId = req.params.id
+  const room = await DB.getRoomById(roomId)
 
   if (!room) {
-    res.status(404).send({ msg: `Room ${roomCode} does not exist` })
+    res.status(404).send({ msg: `Room ${roomId} does not exist` })
     return
   }
 
@@ -170,24 +170,25 @@ secureApiRouter.post('/room/:code/options', async (req, res) => {
     return
   }
 
-  await DB.addOptionToRoom(roomCode, newOption)
-  const newOptions = (await DB.getRoom(roomCode)).options
-
-  res.status(201).send({ options: newOptions })
+  if (await DB.addOptionToRoom(roomId, newOption)) {
+    res.status(201).send({ options: [...room.options, newOption] })
+    return
+  }
+  res.status(500).send({ msg: 'unknown server error' })
 })
 
-secureApiRouter.post('/room/:code/lockin', async (req, res) => {
+secureApiRouter.post('/room/:id/lockin', async (req, res) => {
   if (!req.body.votes) {
     res.status(400).send({ msg: 'Missing votes' })
     return
   }
 
   const user = await getUserFromRequest(req)
-  const roomCode = req.params.code
-  const room = await DB.getRoom(roomCode)
+  const roomId = req.params.id
+  const room = await DB.getRoomById(roomId)
 
   if (!room) {
-    res.status(404).send({ msg: `Room ${roomCode} does not exist` })
+    res.status(404).send({ msg: `Room ${roomId} does not exist` })
     return
   }
 
@@ -201,24 +202,20 @@ secureApiRouter.post('/room/:code/lockin', async (req, res) => {
     return
   }
 
-  const success = await DB.submitUserVotes(roomCode, user.username, req.body.votes)
+  await DB.submitUserVotes(roomId, user.username, req.body.votes)
 
   const isOwner = room.owner === user.username
 
-  if (success) {
-    res.status(200).send({ resultsId: '', isOwner })
-  } else {
-    res.status(400).send({ msg: 'User has already voted' })
-  }
+  res.status(200).send({ resultsId: '', isOwner })
 })
 
-secureApiRouter.post('/room/:code/close', async (req, res) => {
+secureApiRouter.post('/room/:id/close', async (req, res) => {
   const user = await getUserFromRequest(req)
-  const roomCode = req.params.code
-  const room = await DB.getRoom(roomCode)
+  const roomId = req.params.id
+  const room = await DB.getRoomById(roomId)
 
   if (!room) {
-    res.status(404).send({ msg: `Room ${roomCode} does not exist` })
+    res.status(404).send({ msg: `Room ${roomId} does not exist` })
     return
   }
   const isOwner = room.owner === user.username
@@ -233,7 +230,7 @@ secureApiRouter.post('/room/:code/close', async (req, res) => {
     return
   }
 
-  await DB.closeRoom(roomCode)
+  await DB.closeRoom(roomId)
 
   const sortedOptions = calculateVoteResult(room.votes)
   const result = await DB.createResult(user.username, sortedOptions)

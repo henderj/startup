@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './new.css';
 import { NavLink } from 'react-router-dom';
 import { getIconUrlFromSeed } from '../../utils'
-import { UserContext } from '../../context/userContext';
 
 export default function New() {
   useEffect(() => {
@@ -10,8 +9,9 @@ export default function New() {
   }, [])
   const [copied, setCopied] = useState(false)
   const [roomCode, setRoomCode] = useState('')
+  const [roomId, setRoomId] = useState('')
   const iconUrl = getIconUrlFromSeed(roomCode)
-  const navUrl = `/vote/${roomCode}`
+  const navUrl = `/vote/${roomId}`
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,6 +25,7 @@ export default function New() {
       const body = await response.json()
       if (response.status == 201) {
         setRoomCode(body.code)
+        setRoomId(body.id)
       }
     }
 

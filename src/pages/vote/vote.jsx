@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './vote.css';
 import { NavLink, useParams } from 'react-router-dom';
-import { UserContext } from '../../context/userContext';
 
 const MIN_VALUE = 0
 const MAX_VALUE = 10
@@ -80,7 +79,7 @@ function AddOption(props) {
   )
 }
 
-export default function Vote(props) {
+export default function Vote() {
   useEffect(() => {
     document.title = 'QuikVote'
   }, [])
@@ -90,10 +89,35 @@ export default function Vote(props) {
   const [isRoomOwner, setIsRoomOwner] = useState(false)
   const [resultsId, setResultsId] = useState('')
   const [copied, setCopied] = useState(false)
-  const { code } = useParams()
+  const [code, setCode] = useState('')
+
+  const { id } = useParams()
+
+  useEffect(() => {
+    const fetchRoom = async () => {
+      const response = await fetch(`/api/room/${id}`, {
+        method: 'GET',
+        headers: {
+          'Content-type': 'application/json; charset=UTF-8'
+        }
+      })
+      if (response.status == 200) {
+        const body = await response.json()
+        setCode(body.code)
+        body.options.forEach(opt => {
+          if (!values.has(opt)) {
+            values.set(opt, 5)
+          }
+        })
+        setValues(new Map(values))
+        setOptions(body.options)
+      }
+    }
+    fetchRoom().catch(console.error)
+  }, [])
 
   async function addOption(opt) {
-    const response = await fetch(`/api/room/${code}/options`, {
+    const response = await fetch(`/api/room/${id}/options`, {
       method: 'POST',
       body: JSON.stringify({ option: opt }),
       headers: {
@@ -138,7 +162,7 @@ export default function Vote(props) {
       className="main__button"
       onClick={() => {
         setLockedIn(true)
-        fetch(`/api/room/${code}/lockin`, {
+        fetch(`/api/room/${id}/lockin`, {
           method: 'POST',
           body: JSON.stringify({ votes: Object.fromEntries(values) }),
           headers: {
@@ -155,7 +179,7 @@ export default function Vote(props) {
     const lockedInButton = (<button className="main__button main__button--disabled" disabled>Locked in</button>)
     const closeVoteButton = (<button
       className="main__button"
-      onClick={() => fetch(`/api/room/${code}/close`, {
+      onClick={() => fetch(`/api/room/${id}/close`, {
         method: 'POST',
         headers: {
           'Content-type': 'application/json; charset=UTF-8'

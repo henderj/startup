@@ -1,8 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './join.css';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { getIconUrlFromSeed } from '../../utils';
-import { UserContext } from '../../context/userContext';
 
 export default function Join() {
   useEffect(() => {
@@ -10,7 +9,6 @@ export default function Join() {
   }, [])
   const [roomCode, setRoomCode] = useState('')
   const [btnEnabled, setBtnEnabled] = useState(false)
-  const { currentUser } = useContext(UserContext)
   const iconUrl = getIconUrlFromSeed(roomCode)
   const navigate = useNavigate()
   const MAX_LENGTH = 4
@@ -26,16 +24,15 @@ export default function Join() {
   async function onBtnClick(event) {
     event.preventDefault()
     setBtnEnabled(false)
-    console.log('here')
     const response = await fetch(`/api/room/${roomCode}/join`, {
       method: 'POST',
       headers: {
         'Content-type': 'application/json; charset=UTF-8'
       }
     })
-    console.log('after')
     if (response.status == 200) {
-      navigate(`/vote/${roomCode}`)
+      const body = await response.json()
+      navigate(`/vote/${body.id}`)
     } else {
       setBtnEnabled(true)
     }

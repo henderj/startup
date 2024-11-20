@@ -67,13 +67,20 @@ async function createRoom(creatorUsername) {
     votes: [],
     state: 'open'
   }
-  await roomsCollection.insertOne(newRoom)
+  const result = await roomsCollection.insertOne(newRoom)
 
-  return newRoom.code
+  return {
+    ...newRoom,
+    id: result.insertedId
+  }
 }
 
-async function getRoom(roomCode) {
+async function getRoomByCode(roomCode) {
   return await roomsCollection.findOne({ code: roomCode })
+}
+
+async function getRoomById(roomId) {
+  return await roomsCollection.findOne(new ObjectId(roomId))
 }
 
 async function addParticipantToRoom(roomCode, username) {
@@ -88,9 +95,9 @@ async function addParticipantToRoom(roomCode, username) {
   return result.acknowledged && result.matchedCount === 1
 }
 
-async function addOptionToRoom(roomCode, option) {
+async function addOptionToRoom(roomId, option) {
   const result = await roomsCollection.updateOne(
-    { code: roomCode, state: 'open' },
+    { _id: new ObjectId(roomId), state: 'open' },
     {
       $addToSet: {
         options: option
@@ -100,9 +107,9 @@ async function addOptionToRoom(roomCode, option) {
   return result.acknowledged && result.matchedCount === 1
 }
 
-async function submitUserVotes(roomCode, username, votes) {
+async function submitUserVotes(roomId, username, votes) {
   const result = await roomsCollection.updateOne(
-    { code: roomCode, "votes.username": { $ne: username }},
+    { _id: new ObjectId(roomId), "votes.username": { $ne: username } },
     {
       $push: {
         votes: {
@@ -115,9 +122,9 @@ async function submitUserVotes(roomCode, username, votes) {
   return result.acknowledged && result.matchedCount === 1
 }
 
-async function closeRoom(roomCode) {
+async function closeRoom(roomId) {
   const result = await roomsCollection.updateOne(
-    { code: roomCode },
+    { _id: new ObjectId(roomId) },
     {
       $set: {
         state: 'closed'
@@ -165,7 +172,8 @@ module.exports = {
   getUserByToken,
   createUser,
   createRoom,
-  getRoom,
+  getRoomByCode,
+  getRoomById,
   addParticipantToRoom,
   addOptionToRoom,
   submitUserVotes,
