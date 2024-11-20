@@ -30,8 +30,7 @@ export default function Join() {
     const response = await fetch(`/api/room/${roomCode}/join`, {
       method: 'POST',
       headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-        'Authorization': `Bearer ${currentUser.token}`
+        'Content-type': 'application/json; charset=UTF-8'
       }
     })
     console.log('after')

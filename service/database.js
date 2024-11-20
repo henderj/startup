@@ -1,4 +1,4 @@
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 const uuid = require('uuid');
 const bcrypt = require('bcrypt');
 const dbconfig = require('./dbconfig.json')
@@ -9,6 +9,7 @@ const client = new MongoClient(dbUrl)
 const db = client.db('quikvote')
 const userCollection = db.collection('user')
 const roomsCollection = db.collection('room')
+const historyCollection = db.collection('history')
 
 async function testConnection() {
   await client.connect()
@@ -114,6 +115,51 @@ async function submitUserVotes(roomCode, username, votes) {
   return result.acknowledged && result.matchedCount === 1
 }
 
+async function closeRoom(roomCode) {
+  const result = await roomsCollection.updateOne(
+    { code: roomCode },
+    {
+      $set: {
+        state: 'closed'
+      }
+    }
+  )
+  return result.acknowledged && result.matchedCount === 1
+}
+
+async function deleteRoom(roomId) {
+  const result = await roomsCollection.deleteOne(new ObjectId(roomId))
+  return result.acknowledged && result.deletedCount == 1
+}
+
+async function createResult(username, sortedOptions) {
+  const result = {
+    owner: username,
+    sortedOptions,
+    timestamp: Date.now()
+  }
+
+  const insertResult = await historyCollection.insertOne(result)
+  return {
+    ...result,
+    _id: insertResult.insertedId
+  }
+}
+
+async function getResult(resultId) {
+  return await historyCollection.findOne(new ObjectId(resultId))
+}
+
+async function getHistory(username) {
+  const cursor = historyCollection.find(
+    { owner: username },
+    {
+      sort: { timestamp: -1 }
+    }
+  )
+  return await cursor.toArray()
+}
+
 module.exports = {
   getUser,
   getUserByToken,
@@ -122,5 +168,10 @@ module.exports = {
   getRoom,
   addParticipantToRoom,
   addOptionToRoom,
-  submitUserVotes
+  submitUserVotes,
+  closeRoom,
+  deleteRoom,
+  createResult,
+  getResult,
+  getHistory
 };

@@ -206,7 +206,7 @@ secureApiRouter.post('/room/:code/lockin', async (req, res) => {
   const isOwner = room.owner === user.username
 
   if (success) {
-    res.status(200).send({ resultsReady: false, isOwner })
+    res.status(200).send({ resultsId: '', isOwner })
   } else {
     res.status(400).send({ msg: 'User has already voted' })
   }
@@ -215,7 +215,7 @@ secureApiRouter.post('/room/:code/lockin', async (req, res) => {
 secureApiRouter.post('/room/:code/close', async (req, res) => {
   const user = await getUserFromRequest(req)
   const roomCode = req.params.code
-  const room = rooms.get(roomCode)
+  const room = await DB.getRoom(roomCode)
 
   if (!room) {
     res.status(404).send({ msg: `Room ${roomCode} does not exist` })
@@ -233,51 +233,43 @@ secureApiRouter.post('/room/:code/close', async (req, res) => {
     return
   }
 
-  room.state = 'closed'
+  await DB.closeRoom(roomCode)
 
-  const totals = Array.from(room.votes)
-    .sort((a, b) => b[1] - a[1])
-    .map(([key]) => key)
-  const resultObj = {
-    results: totals,
-    timestamp: Date.now()
-  }
-  if (results.has(room.owner)) {
-    results.get(room.owner).push(resultObj)
-  } else {
-    results.set(room.owner, [resultObj])
-  }
+  const sortedOptions = calculateVoteResult(room.votes)
+  const result = await DB.createResult(user.username, sortedOptions)
 
-  res.status(200).send({ resultsReady: true })
+  res.status(200).send({ resultsId: result._id })
 })
 
-secureApiRouter.get('/room/:code/results', async (req, res) => {
-  const roomCode = req.params.code
-  const room = rooms.get(roomCode)
-
-  if (!room) {
-    res.status(404).send({ msg: `Room ${roomCode} does not exist` })
-    return
-  }
-
-  if (!room.state === 'closed') {
-    res.status(409).send({ msg: 'Room must be closed' })
-    return
-  }
-
-  const results = Array.from(room.votes)
+function calculateVoteResult(votes) {
+  totals = new Map()
+  votes.forEach(element => {
+    Object.keys(element.votes).forEach(key => {
+      totals.set(key, (totals.get(key) ?? 0) + element.votes[key])
+    })
+  });
+  const sortedOptions = Array.from(totals)
     .sort((a, b) => b[1] - a[1])
     .map(([key]) => key)
+  return sortedOptions
+}
 
+secureApiRouter.get('/results/:id', async (req, res) => {
+  const resultsId = req.params.id
+  const result = await DB.getResult(resultsId)
 
-  res.status(200).send({ results })
+  if (!result) {
+    res.status(404).send({ msg: `Result does not exist` })
+    return
+  }
+
+  res.status(200).send({ results: result.sortedOptions })
 })
 
 secureApiRouter.get('/history', async (req, res) => {
   const user = await getUserFromRequest(req)
 
-  const history = results.get(user.username)
-    .sort((a, b) => b.timestamp - a.timestamp)
+  const history = await DB.getHistory(user.username)
 
   res.status(200).send({ history })
 })

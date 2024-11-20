@@ -1,22 +1,19 @@
 import React, { useContext, useEffect, useState } from 'react';
 import './results.css';
 import { NavLink, useParams } from 'react-router-dom';
-import { UserContext } from '../../context/userContext';
 
 export default function Results() {
   useEffect(() => {
     document.title = 'Results'
   }, [])
   const [items, setItems] = useState([])
-  const { code } = useParams()
-  const { currentUser } = useContext(UserContext)
+  const { id: resultsId } = useParams()
   useEffect(() => {
     const fetchItems = async () => {
-      const response = await fetch(`/api/room/${code}/results`, {
+      const response = await fetch(`/api/results/${resultsId}`, {
         method: 'GET',
         headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-          'Authorization': `Bearer ${currentUser.token}`
+          'Content-type': 'application/json; charset=UTF-8'
         }
       })
       const body = await response.json()

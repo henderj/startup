@@ -88,9 +88,8 @@ export default function Vote(props) {
   const [values, setValues] = useState(new Map())
   const [lockedIn, setLockedIn] = useState(false)
   const [isRoomOwner, setIsRoomOwner] = useState(false)
-  const [resultsReady, setIsResultsReady] = useState(false)
+  const [resultsId, setResultsId] = useState('')
   const [copied, setCopied] = useState(false)
-  const { currentUser } = useContext(UserContext)
   const { code } = useParams()
 
   async function addOption(opt) {
@@ -98,8 +97,7 @@ export default function Vote(props) {
       method: 'POST',
       body: JSON.stringify({ option: opt }),
       headers: {
-        'Content-type': 'application/json; charset=UTF-8',
-        'Authorization': `Bearer ${currentUser.token}`
+        'Content-type': 'application/json; charset=UTF-8'
       }
     })
     if (response.status !== 201) {
@@ -144,14 +142,13 @@ export default function Vote(props) {
           method: 'POST',
           body: JSON.stringify({ votes: Object.fromEntries(values) }),
           headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-            'Authorization': `Bearer ${currentUser.token}`
+            'Content-type': 'application/json; charset=UTF-8'
           }
         })
           .then(res => res.json())
           .then(j => {
             setIsRoomOwner(j.isOwner)
-            setIsResultsReady(j.resultsReady)
+            setResultsId(j.resultsId)
           })
       }}
     >Lock in vote</button>)
@@ -161,23 +158,22 @@ export default function Vote(props) {
       onClick={() => fetch(`/api/room/${code}/close`, {
         method: 'POST',
         headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-          'Authorization': `Bearer ${currentUser.token}`
+          'Content-type': 'application/json; charset=UTF-8'
         }
       })
         .then(res => res.json())
-        .then(j => setIsResultsReady(j.resultsReady))
+        .then(j => setResultsId(j.resultsId))
       }
     >Close vote</button>)
     const viewResultsButton = (<NavLink
       className="main__button"
-      to={`/results/${code}`}
+      to={`/results/${resultsId}`}
     >View Results</NavLink>)
 
     if (!lockedIn) {
       return lockInButton
     }
-    if (!resultsReady) {
+    if (resultsId === '') {
       if (isRoomOwner) { return closeVoteButton }
       return lockedInButton
     }

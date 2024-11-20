@@ -17,14 +17,13 @@ export default function History() {
         method: 'GET',
         headers: {
           'Content-type': 'application/json; charset=UTF-8',
-          'Authorization': `Bearer ${currentUser.token}`
         }
       })
       if (response.status == 200) {
         const body = await response.json()
         setDataArray(body.history.map(h => ({
-          winner: h.results[0],
-          runnersUp: h.results.slice(1),
+          winner: h.sortedOptions[0],
+          runnersUp: h.sortedOptions.slice(1),
           date: h.timestamp
         })))
       }
