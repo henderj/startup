@@ -64,8 +64,17 @@
   display: flex;
 }
 
+.vote-buttons__button--disabled {
+  color: #ccc;
+  cursor: default;
+}
+
 .vote-buttons__button:hover {
   background-color: #bdd2ff;
+}
+
+.vote-buttons__button--disabled:hover {
+  background-color: #fff;
 }
 
 .vote-buttons__value {

@@ -63,7 +63,7 @@ async function createRoom(creatorUsername) {
     owner: creatorUsername,
     participants: [creatorUsername],
     options: [],
-    votes: {},
+    votes: [],
     state: 'open'
   }
   await roomsCollection.insertOne(newRoom)
@@ -71,9 +71,56 @@ async function createRoom(creatorUsername) {
   return newRoom.code
 }
 
+async function getRoom(roomCode) {
+  return await roomsCollection.findOne({ code: roomCode })
+}
+
+async function addParticipantToRoom(roomCode, username) {
+  const result = await roomsCollection.updateOne(
+    { code: roomCode, state: 'open' },
+    {
+      $addToSet: {
+        participants: username
+      }
+    }
+  )
+  return result.acknowledged && result.matchedCount === 1
+}
+
+async function addOptionToRoom(roomCode, option) {
+  const result = await roomsCollection.updateOne(
+    { code: roomCode, state: 'open' },
+    {
+      $addToSet: {
+        options: option
+      }
+    }
+  )
+  return result.acknowledged && result.matchedCount === 1
+}
+
+async function submitUserVotes(roomCode, username, votes) {
+  const result = await roomsCollection.updateOne(
+    { code: roomCode, "votes.username": { $ne: username }},
+    {
+      $push: {
+        votes: {
+          username,
+          votes
+        }
+      }
+    }
+  )
+  return result.acknowledged && result.matchedCount === 1
+}
+
 module.exports = {
   getUser,
   getUserByToken,
   createUser,
-  createRoom
+  createRoom,
+  getRoom,
+  addParticipantToRoom,
+  addOptionToRoom,
+  submitUserVotes
 };

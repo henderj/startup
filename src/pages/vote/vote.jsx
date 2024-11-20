@@ -22,11 +22,19 @@ function VoteOption(props) {
   return (
     <li className="vote-options__item">{props.name}
       <div className="vote-buttons">
-        <button className="vote-buttons__button" onClick={decreaseValue}>
+        <button
+          className={`vote-buttons__button ${props.disabled ? 'vote-buttons__button--disabled' : ''}`}
+          onClick={decreaseValue}
+          disabled={props.disabled}
+        >
           <span className="material-symbols-outlined">arrow_downward</span>
         </button>
         <span className="vote-buttons__value">{props.value}</span>
-        <button className="vote-buttons__button" onClick={increaseValue}>
+        <button
+          className={`vote-buttons__button ${props.disabled ? 'vote-buttons__button--disabled' : ''}`}
+          onClick={increaseValue}
+          disabled={props.disabled}
+        >
           <span className="material-symbols-outlined">arrow_upward</span>
         </button>
       </div>
@@ -50,7 +58,7 @@ function AddOption(props) {
     submit()
   }
   function checkDisabled() {
-    return value == ''
+    return props.disabled || value == ''
   }
   return (
     <form className="add-option">
@@ -116,6 +124,7 @@ export default function Vote(props) {
         key={i}
         value={values.get(opt)}
         setValue={(val) => setValues(new Map(values.set(opt, val)))}
+        disabled={lockedIn}
       />
     ))
   }
@@ -185,7 +194,7 @@ export default function Vote(props) {
         <ul className="vote-options">
           {renderOptions()}
         </ul>
-        <AddOption onSubmit={addOption} />
+        <AddOption onSubmit={addOption} disabled={lockedIn} />
         {renderButton()}
       </main>
     </>
