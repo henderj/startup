@@ -88,11 +88,10 @@ For this deliverable I built a backend service for my app.
 
 For this deliverable I connected my app to MongoDB for authentication and other persistent data
 
-Application authentication and authorization
-* [ ] Supports new user registration
-* [ ] Supports existing user authentication and logout
-* [ ] Stores application data in MongoDB
-* [ ] Stores and retrieves credentials in MongoDB
-* [ ] Restricts application functionality based upon authentication
+* [x] Supports new user registration - New users are registered on the login page through the /api/register endpoint
+* [x] Supports existing user authentication and logout - Existing users login and logout on the login page through the the /api/login and /api/logout endpoints
+* [x] Stores application data in MongoDB - Data is stored in MongoDB with service/database.js handling the database interaction
+* [x] Stores and retrieves credentials in MongoDB - Users are given token which are stored and retrieved from MongoDB
+* [x] Restricts application functionality based upon authentication - Any unauthenticated call throws a 401 http error
 
 ## [Notes](./notes.md)
