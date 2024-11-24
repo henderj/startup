@@ -11,7 +11,7 @@
 ## push to server
 
 ```bash
-./deployFiles.sh -k [key pair file] -h quikvote.click -s startup
+./deployService.sh -k [key pair file] -h quikvote.click -s startup
 ```
 
 
