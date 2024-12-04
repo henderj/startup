@@ -5,19 +5,19 @@ class WebSocketHandler {
     let port = window.location.port;
     const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
     this.socket = new WebSocket(`${protocol}://${window.location.hostname}:${port}/ws`);
-    // this.socket.onopen = (event) => {
-    //   this.receiveEvent(new EventMessage('Simon', GameEvent.System, { msg: 'connected' }));
-    // };
-    // this.socket.onclose = (event) => {
-    //   this.receiveEvent(new EventMessage('Simon', GameEvent.System, { msg: 'disconnected' }));
-    // };
-    this.socket.onmessage = async (msg) => {
+    this.socket.onopen = (event) => {
+      console.log('web socket connected!')
+    };
+    this.socket.onclose = (event) => {
+      console.log('web socket disconnected')
+    };
+    this.socket.onmessage = (msg) => {
       try {
-        console.log(`received event: ${JSON.stringify(msg, undefined, 4)}`)
-        const event = JSON.parse(await msg.data.text());
-        console.log(`parsed event: ${event}`)
+        console.log(`received event: ${JSON.stringify(msg.data, undefined, 4)}`)
+        const event = JSON.parse(msg.data);
+        console.log(`parsed event: ${JSON.stringify(event)}`)
         this.receiveOptions(event.options);
-      } catch (err) { 
+      } catch (err) {
         console.error('error parsing message:', err)
       }
     };
