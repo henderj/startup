@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './vote.css';
 import { NavLink, useParams } from 'react-router-dom';
+import { WSHandler } from './websocket_handler'
 
 const MIN_VALUE = 0
 const MAX_VALUE = 10
@@ -116,25 +117,25 @@ export default function Vote() {
     fetchRoom().catch(console.error)
   }, [])
 
-  async function addOption(opt) {
-    const response = await fetch(`/api/room/${id}/options`, {
-      method: 'POST',
-      body: JSON.stringify({ option: opt }),
-      headers: {
-        'Content-type': 'application/json; charset=UTF-8'
-      }
-    })
-    if (response.status !== 201) {
-      return
-    }
-    const body = await response.json()
-    body.options.forEach(opt => {
+  useEffect(() => {
+    WSHandler.addHandler(receiveOptions)
+
+    return () => WSHandler.removeHandler(receiveOptions)
+  })
+
+  function receiveOptions(new_options) {
+    console.log(`received options: ${new_options}`)
+    new_options.forEach(opt => {
       if (!values.has(opt)) {
         values.set(opt, 5)
       }
     })
     setValues(new Map(values))
-    setOptions(body.options)
+    setOptions(new_options)
+  }
+
+  async function addOption(opt) {
+    WSHandler.addOption(id, opt)
   }
   function renderOptions() {
     if (options.length == 0) {
