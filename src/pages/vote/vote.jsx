@@ -136,6 +136,7 @@ export default function Vote() {
       setValues(new Map(values))
       setOptions(new_options)
     } else if (event.type == 'results-available') {
+      setLockedIn(true)
       setResultsId(event.id)
     }
   }
@@ -170,17 +171,6 @@ export default function Vote() {
       onClick={() => {
         setLockedIn(true)
         WSHandler.lockIn(id, Object.fromEntries(values))
-        // fetch(`/api/room/${id}/lockin`, {
-        //   method: 'POST',
-        //   body: JSON.stringify({ votes: Object.fromEntries(values) }),
-        //   headers: {
-        //     'Content-type': 'application/json; charset=UTF-8'
-        //   }
-        // })
-        //   .then(res => res.json())
-        //   .then(j => {
-        //     setResultsId(j.resultsId)
-        //   })
       }}
     >Lock in vote</button>)
     const lockedInButton = (<button className="main__button main__button--disabled" disabled>Locked in</button>)
