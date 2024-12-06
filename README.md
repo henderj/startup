@@ -94,4 +94,12 @@ For this deliverable I connected my app to MongoDB for authentication and other 
 * [x] Stores and retrieves credentials in MongoDB - Users are given token which are stored and retrieved from MongoDB
 * [x] Restricts application functionality based upon authentication - Any unauthenticated call throws a 401 http error
 
+## WebSocket Deliverable
+
+* [x] Backend listens for WebSocket connection - [peerProxy.js](../service/peerProxy.js) listens for WebSocket connections on the backend
+* [x] Frontend makes WebSocket connection - [websocket_handler.js](../src/pages/vote/websocket_handler.js) creates WebSocket connections on the frontend
+* [x] Data sent over WebSocket connection - [websocket_handler.js](../src/pages/vote/websocket_handler.js) sends/receives data to/from [peerProxy.js](../service/peerProxy.js)
+* [x] WebSocket data displayed in the application interface - [vote.jsx](../src/pages/vote/vote.jsx) displays data from WebSocket
+* [x] All visible elements are working - All previously mocked elements are now functional
+
 ## [Notes](./notes.md)
