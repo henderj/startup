@@ -96,10 +96,10 @@ For this deliverable I connected my app to MongoDB for authentication and other 
 
 ## WebSocket Deliverable
 
-* [x] Backend listens for WebSocket connection - [peerProxy.js](../service/peerProxy.js) listens for WebSocket connections on the backend
-* [x] Frontend makes WebSocket connection - [websocket_handler.js](../src/pages/vote/websocket_handler.js) creates WebSocket connections on the frontend
-* [x] Data sent over WebSocket connection - [websocket_handler.js](../src/pages/vote/websocket_handler.js) sends/receives data to/from [peerProxy.js](../service/peerProxy.js)
-* [x] WebSocket data displayed in the application interface - [vote.jsx](../src/pages/vote/vote.jsx) displays data from WebSocket
+* [x] Backend listens for WebSocket connection - ./service/peerProxy.js listens for WebSocket connections on the backend
+* [x] Frontend makes WebSocket connection - ./src/pages/vote/websocket_handler.js creates WebSocket connections on the frontend
+* [x] Data sent over WebSocket connection - ./src/pages/vote/websocket_handler.js sends/receives data to/from ./service/peerProxy.js
+* [x] WebSocket data displayed in the application interface - ./src/pages/vote/vote.jsx displays data from WebSocket
 * [x] All visible elements are working - All previously mocked elements are now functional
 
 ## [Notes](./notes.md)
