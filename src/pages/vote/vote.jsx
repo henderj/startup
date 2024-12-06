@@ -95,6 +95,7 @@ export default function Vote() {
   const { id } = useParams()
 
   useEffect(() => {
+    WSHandler.connect()
     const fetchRoom = async () => {
       const response = await fetch(`/api/room/${id}`, {
         method: 'GET',
@@ -112,26 +113,31 @@ export default function Vote() {
         })
         setValues(new Map(values))
         setOptions(body.options)
+        setIsRoomOwner(body.isOwner)
       }
     }
     fetchRoom().catch(console.error)
   }, [])
 
   useEffect(() => {
-    WSHandler.addHandler(receiveOptions)
+    WSHandler.addHandler(receiveEvent)
 
-    return () => WSHandler.removeHandler(receiveOptions)
+    return () => WSHandler.removeHandler(receiveEvent)
   })
 
-  function receiveOptions(new_options) {
-    console.log(`received options: ${new_options}`)
-    new_options.forEach(opt => {
-      if (!values.has(opt)) {
-        values.set(opt, 5)
-      }
-    })
-    setValues(new Map(values))
-    setOptions(new_options)
+  function receiveEvent(event) {
+    if (event.type == 'options') {
+      const new_options = event.options
+      new_options.forEach(opt => {
+        if (!values.has(opt)) {
+          values.set(opt, 5)
+        }
+      })
+      setValues(new Map(values))
+      setOptions(new_options)
+    } else if (event.type == 'results-available') {
+      setResultsId(event.id)
+    }
   }
 
   async function addOption(opt) {
@@ -163,18 +169,18 @@ export default function Vote() {
       className="main__button"
       onClick={() => {
         setLockedIn(true)
-        fetch(`/api/room/${id}/lockin`, {
-          method: 'POST',
-          body: JSON.stringify({ votes: Object.fromEntries(values) }),
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8'
-          }
-        })
-          .then(res => res.json())
-          .then(j => {
-            setIsRoomOwner(j.isOwner)
-            setResultsId(j.resultsId)
-          })
+        WSHandler.lockIn(id, Object.fromEntries(values))
+        // fetch(`/api/room/${id}/lockin`, {
+        //   method: 'POST',
+        //   body: JSON.stringify({ votes: Object.fromEntries(values) }),
+        //   headers: {
+        //     'Content-type': 'application/json; charset=UTF-8'
+        //   }
+        // })
+        //   .then(res => res.json())
+        //   .then(j => {
+        //     setResultsId(j.resultsId)
+        //   })
       }}
     >Lock in vote</button>)
     const lockedInButton = (<button className="main__button main__button--disabled" disabled>Locked in</button>)

@@ -3,6 +3,7 @@ const bcrypt = require('bcrypt')
 const cookieParser = require('cookie-parser')
 const DB = require('./database.js');
 const { peerProxy } = require('./peerProxy.js');
+const { calculateVoteResult } = require('./calculateVoteResult.js')
 
 const app = express();
 
@@ -100,6 +101,7 @@ secureApiRouter.post('/room', async (req, res) => {
 })
 
 secureApiRouter.get('/room/:id', async (req, res) => {
+  const user = await getUserFromRequest(req)
   const roomId = req.params.id
   const room = await DB.getRoomById(roomId)
 
@@ -113,7 +115,7 @@ secureApiRouter.get('/room/:id', async (req, res) => {
     return
   }
 
-  res.status(200).send(room)
+  res.status(200).send({ ...room, isOwner: room.owner === user.username })
 })
 
 secureApiRouter.post('/room/:code/join', async (req, res) => {
@@ -238,19 +240,6 @@ secureApiRouter.post('/room/:id/close', async (req, res) => {
 
   res.status(200).send({ resultsId: result._id })
 })
-
-function calculateVoteResult(votes) {
-  totals = new Map()
-  votes.forEach(element => {
-    Object.keys(element.votes).forEach(key => {
-      totals.set(key, (totals.get(key) ?? 0) + element.votes[key])
-    })
-  });
-  const sortedOptions = Array.from(totals)
-    .sort((a, b) => b[1] - a[1])
-    .map(([key]) => key)
-  return sortedOptions
-}
 
 secureApiRouter.get('/results/:id', async (req, res) => {
   const resultsId = req.params.id

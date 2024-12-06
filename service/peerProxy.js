@@ -1,5 +1,6 @@
 const DB = require('./database.js');
 const { WebSocketServer } = require('ws');
+const { calculateVoteResult } = require('./calculateVoteResult.js')
 const uuid = require('uuid');
 
 const authCookieName = 'token';
@@ -47,34 +48,14 @@ function peerProxy(httpServer) {
 
     // Forward messages to everyone except the sender
     ws.on('message', async function message(data) {
-      console.log(`Recieved ws message from ${connection.user}: ${data}`)
       const dataParsed = JSON.parse(data)
-      const room = await DB.getRoomById(dataParsed.room)
-      if (!room) {
-        console.warn(`no room with id ${dataParsed.room}`)
-        return
-      }
-      if (!room.state === 'open') {
-        console.warn('room is closed')
-        return
-      }
-      if (!room.participants.includes(connection.user)) {
-        console.warn(`room does not include user ${connection.user}`)
-        return
-      }
-
-      const newOption = dataParsed.option
-      if (room.options.map(opt => opt.toLowerCase()).includes(newOption.toLowerCase())) {
-        console.warn('room already includes option')
-        return
-      }
-
-      if (await DB.addOptionToRoom(dataParsed.room, newOption)) {
-        console.log('added option to room. sending notification...')
-        connections.filter(c => room.participants.includes(c.user)).forEach((c) => {
-          console.log(`sending to ${c.user}`)
-          c.ws.send(JSON.stringify({ options: [...room.options, newOption] }));
-        });
+      console.log(`Recieved ws message from ${connection.user}: ${JSON.stringify(dataParsed, undefined, 4)}`)
+      if (dataParsed.type == 'new_option') {
+        handleNewOption(dataParsed, connection, connections)
+      } else if (dataParsed.type == 'lock_in') {
+        handleLockIn(dataParsed, connection, connections)
+      } else if (dataParsed.type == 'close_room') {
+        handleCloseRoom(dataParsed, connection, connections)
       }
     });
 
@@ -101,6 +82,98 @@ function peerProxy(httpServer) {
       }
     });
   }, 10000);
+}
+
+async function handleNewOption(event, connection, connections) {
+  const room = await DB.getRoomById(event.room)
+  if (!room) {
+    console.warn(`no room with id ${event.room}`)
+    return
+  }
+  if (!room.state === 'open') {
+    console.warn('room is closed')
+    return
+  }
+  if (!room.participants.includes(connection.user)) {
+    console.warn(`room does not include user ${connection.user}`)
+    return
+  }
+
+  const newOption = event.option
+  if (room.options.map(opt => opt.toLowerCase()).includes(newOption.toLowerCase())) {
+    console.warn('room already includes option')
+    return
+  }
+
+  if (await DB.addOptionToRoom(event.room, newOption)) {
+    connections.filter(c => room.participants.includes(c.user)).forEach((c) => {
+      c.ws.send(JSON.stringify({ type: 'options', options: [...room.options, newOption] }));
+    });
+  }
+}
+
+async function handleLockIn(event, connection, connections) {
+  const user = connection.user
+  const roomId = event.room
+  const room = await DB.getRoomById(roomId)
+
+  if (!room) {
+    console.warn(`no room with id ${event.room}`)
+    return
+  }
+
+  if (!room.state === 'open') {
+    console.warn('room is closed')
+    return
+  }
+
+  if (!room.participants.includes(user)) {
+    console.warn(`room does not include user ${connection.user}`)
+    return
+  }
+
+  await DB.submitUserVotes(roomId, user, event.votes)
+
+  const new_room = await DB.getRoomById(roomId)
+  if (new_room.votes.length == new_room.participants.length) {
+    // all users have voted
+    await DB.closeRoom(roomId)
+
+    const sortedOptions = calculateVoteResult(new_room.votes)
+    const result = await DB.createResult(user, sortedOptions)
+    connections.filter(c => new_room.participants.includes(c.user)).forEach((c) => {
+      c.ws.send(JSON.stringify({ type: 'results-available', id: result._id }));
+    });
+  }
+}
+
+async function handleCloseRoom(event, connection, connections) {
+  const user = connection.user
+  const roomId = event.room
+  const room = await DB.getRoomById(roomId)
+
+  if (!room) {
+    console.warn(`no room with id ${event.room}`)
+    return
+  }
+
+  if (!room.state === 'open') {
+    console.warn('room is closed')
+    return
+  }
+
+  if (room.owner !== user) {
+    console.warn('user is not owner of room')
+    return
+  }
+
+  await DB.closeRoom(roomId)
+
+  const sortedOptions = calculateVoteResult(room.votes)
+  const result = await DB.createResult(user, sortedOptions)
+  connections.filter(c => room.participants.includes(c.user)).forEach((c) => {
+    c.ws.send(JSON.stringify({ type: 'results-available', id: result._id }));
+  });
 }
 
 module.exports = { peerProxy };

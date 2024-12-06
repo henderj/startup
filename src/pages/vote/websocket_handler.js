@@ -1,22 +1,26 @@
 class WebSocketHandler {
   handlers = [];
+  connected = false
 
-  constructor() {
+  connect() {
+    if (this.connected) {
+      return
+    }
     let port = window.location.port;
     const protocol = window.location.protocol === 'http:' ? 'ws' : 'wss';
     this.socket = new WebSocket(`${protocol}://${window.location.hostname}:${port}/ws`);
     this.socket.onopen = (event) => {
+      this.connected = true
       console.log('web socket connected!')
     };
     this.socket.onclose = (event) => {
+      this.connected = false
       console.log('web socket disconnected')
     };
     this.socket.onmessage = (msg) => {
       try {
-        console.log(`received event: ${JSON.stringify(msg.data, undefined, 4)}`)
         const event = JSON.parse(msg.data);
-        console.log(`parsed event: ${JSON.stringify(event)}`)
-        this.receiveOptions(event.options);
+        this.receiveEvent(event);
       } catch (err) {
         console.error('error parsing message:', err)
       }
@@ -24,7 +28,15 @@ class WebSocketHandler {
   }
 
   addOption(room, option) {
-    this.socket.send(JSON.stringify({ room, option }));
+    this.socket.send(JSON.stringify({ type: 'new_option', room, option }));
+  }
+
+  lockIn(room, votes) {
+    this.socket.send(JSON.stringify({ type: 'lock_in', room, votes }))
+  }
+
+  closeRoom(room) {
+    this.socket.send(JSON.stringify({ type: 'close_room', room }))
   }
 
   addHandler(handler) {
@@ -35,9 +47,9 @@ class WebSocketHandler {
     this.handlers.filter((h) => h !== handler);
   }
 
-  receiveOptions(options) {
+  receiveEvent(event) {
     this.handlers.forEach((handler) => {
-      handler(options);
+      handler(event);
     });
   }
 }
